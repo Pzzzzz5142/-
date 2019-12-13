@@ -9,6 +9,7 @@ struct token
 stack<string> seq;
 stack<token> sem;
 map<string, int> table = {make_pair("a", 0), make_pair("b", 1)};
+vector<vector<string>> Grammar;
 int cnt=2;
 void gen2()
 {
@@ -27,8 +28,21 @@ void push(string s)
 {
     sem.push({"hello", table[s]});
 }
-void init()
+void init_Grammar()
 {
+    ifstream fl("gm-t");
+    string line;
+    while(getline(fl,line))
+    {
+        stringstream ss(line);
+        string buff;
+        int bg;
+        ss>>bg;
+        while(ss>>buff)
+        {
+            
+        }
+    }
 }
 int main()
 {
@@ -36,6 +50,6 @@ int main()
     string line;
     while(getline(fl,line))
     {
-        
+
     }
 }

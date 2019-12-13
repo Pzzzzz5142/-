@@ -3,9 +3,9 @@ GrammarV = []
 kTable = ['int', 'main', 'void', 'if', 'else', 'char', 'float', 'continue', 'break',
           'double', 'while', 'for', 'return', 'typedef', 'long', 'bool', 'struct', 'class']
 pTable = ['<=', '==', '>=', '!=', '=', '<', '>', '+', '-', '?', ':', '&&', '|', '&', '||',
-          '^','>>','<<','%','~','*', '/', '(', ')', '{', '}', '[', ']', ',', ';', '++', '--', '#', '!']
-Function=[]
-flo = open('Compiler/gm-t', 'w',encoding='utf-8')
+          '^', '>>', '<<', '%', '~', '*', '/', '(', ')', '{', '}', '[', ']', ',', ';', '++', '--', '#', '!']
+Function = []
+flo = open('Compiler/gm-t', 'w', encoding='utf-8')
 
 
 class token(object):
@@ -14,10 +14,10 @@ class token(object):
         self.ind = ind
 
     def __str__(self):
-        return '(%s, %s)' % (self.tp, self.ind)
+        return '·%s,%s·' % (self.tp, self.ind)
 
     def __repr__(self):
-        return '(%s, %s)' % (self.tp, self.ind)
+        return '·%s,%s·' % (self.tp, self.ind)
 
 
 for line in fl.readlines():
@@ -35,9 +35,14 @@ for line in fl.readlines():
             if single[i] == '<' and flg:
                 pre = i
             elif single[i] == '>'and flg:
-                if single[pre:i+1] not in GrammarV:
-                    GrammarV.append(single[pre:i+1])
-                tmp += ' %d' % GrammarV.index(single[pre:i+1])
+                if single[pre:i+1] == '<标识符>':
+                    tmp += ' ·i,x·'
+                elif single[pre:i+1] == '<常量>':
+                    tmp += ' ·c,x·'
+                else:
+                    if single[pre:i+1] not in GrammarV:
+                        GrammarV.append(single[pre:i+1])
+                    tmp += ' %d' % GrammarV.index(single[pre:i+1])
             elif single[i] == '\'' and flg:
                 flg = 0
                 pre = i
@@ -53,8 +58,8 @@ for line in fl.readlines():
                     if single[pre+1:i] not in Function:
                         Function.append(single[pre+1:i])
                     tmp += ' ' + \
-                        token('f', Function.index(single[pre+1:i])).__str__()                    
-        flo.write(' #'+tmp)
+                        token('f', Function.index(single[pre+1:i])).__str__()
+        flo.write(tmp+' #')
     flo.write('\n')
     print(to)
 flo.close()
