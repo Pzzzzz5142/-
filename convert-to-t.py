@@ -54,7 +54,7 @@ for line in fl.readlines():
                         Function.append(single[pre+1:i])
                     tmp += ' ' + \
                         token('f', Function.index(single[pre+1:i])).__str__()                    
-        flo.write(' #'+tmp[1:])
+        flo.write(' #'+tmp)
     flo.write('\n')
     print(to)
 flo.close()
