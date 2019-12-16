@@ -1,26 +1,22 @@
-$程序 -> $其他函数定义 $类型 $主函数定义
+$程序 -> $其他函数定义
 
-$其他函数定义 -> $类型 $函数定义 $其他函数定义 | $全局变量声明 $其他函数定义 | null
+$其他函数定义 -> $类型 $标识符 $函数定义 $其他函数定义 | $全局变量声明 $其他函数定义 | null
 
-$全局变量声明 -> $全局声明语句 ;
+$全局变量声明 -> $struct语句 ;
 
-$全局声明语句 -> $struct语句
-
-$函数定义 -> $标识符 qua_sav_func_name qua_new_synbl qua_new_pfinfl ( $形参列表 ) { $函数体 qua_endproc qua_return } | $声明语句1
+$函数定义 -> qua_fuc_init ( $形参列表 ) { $函数体 } | $声明语句tmp2 ;
 
 $形参列表 -> $形参 $其他形参 | null
 
 $其他形参 -> , $形参 $其他形参 | null
 
-$形参 -> $类型 $形参tmp1 qua_declare qua_declare_param
+$形参 -> $类型 $形参tmp1 
 
-$形参tmp1 -> $标识符 qua_declare_id $声明语句tmp2 | & qua_addrParm $标识符 qua_declare_id
+$形参tmp1 -> $标识符 qua_declare_param $声明语句tmp2_1
 
 
 
-$主函数定义 -> main qua_sav_func_name ( ) { qua_new_synbl $函数体 qua_return }
-
-$函数体 -> $总结构 $函数体 | null | $循环跳转 $函数体
+$函数体 -> $总结构 $函数体 | $循环跳转 $函数体 | null
 
 $总结构 -> $顺序结构 | $循环结构 | $分支结构1
 
@@ -28,15 +24,15 @@ $顺序结构 -> $语句 ;
 
 
 
-$分支结构1 -> if qua_gen_func_name qua_new_synbl ( $表达式 ) quaif { $函数体 qua_endif qua_return } $分支结构2
+$分支结构1 -> if ( $表达式 ) qua_if1 { $函数体 qua_if2 } $分支结构2
 
-$分支结构2 -> else qua_gen_func_name $分支结构3 | null
+$分支结构2 -> else qua_el $分支结构3 | null qua_endif
 
-$分支结构3 -> { qua_new_synbl $函数体 qua_endifall qua_return } | $分支结构1
+$分支结构3 -> { $函数体 qua_ee } | $分支结构1
 
 
 
-$循环结构 -> while qua_gen_func_name qua_new_synbl quawh ( $表达式 ) { quawdo $函数体 quawe qua_return } | for qua_gen_func_name qua_new_synbl ( $for_list_0 ; quafor $for_list_1 quafdo ; $for_list_2 quafsav ) { $函数体 quafe qua_return }
+$循环结构 -> while qua_wh1 ( $表达式 ) { qua_wh2 $函数体 qua_wh3 } | for qua_gen_func_name qua_new_synbl ( $for_list_0 ; quafor $for_list_1 quafdo ; $for_list_2 quafsav ) { $函数体 quafe }
 
 $for_list_0 -> $语句 | null
 
@@ -54,7 +50,7 @@ $输出字符 -> $标识符 | $字符型常量
 
 $赋值语句和函数调用 -> $赋值语句 | $函数调用 | null
 
-$赋值语句 -> $数组方括号 = $表达式 qua= | . $标识符 quap qua_member = $表达式 qua= | = $表达式 qua=
+$赋值语句 -> $数组方括号 = qua_save_op $表达式 qua_op | . $标识符 quap qua_member = qua_save_op $表达式 qua_op | = qua_save_op $表达式 qua_op
 
 $函数调用 -> ( qua_call $实参列表 qua_checknum )
 
@@ -66,7 +62,7 @@ $实参 -> $标识符 quap qua_check_def_e $数组方括号 qua_contrast | $常�
 
 $跳转语句 -> return
 
-$类型 -> int qua_int | float qua_float | bool qua_bool | char qua_char
+$类型 -> int qua_save_type | float qua_save_type | bool qua_save_type | char qua_save_type
 
 
 
@@ -74,17 +70,17 @@ $表达式 -> $关系运算
 
 	$关系运算 -> $tmp3_2 $tmp3_1
 
-	$tmp3_1 -> > $tmp3_2 qua> | >= $tmp3_2 qua>= | < $tmp3_2 qua< | <= $tmp3_2 qua<= | == $tmp3_2 qua== | != $tmp3_2 qua!= | null
+	$tmp3_1 -> > qua_save_op $tmp3_2 qua_op | >= qua_save_op $tmp3_2 qua_op | < qua_save_op $tmp3_2 qua_op | <= qua_save_op $tmp3_2 qua_op | == qua_save_op $tmp3_2 qua_op | != qua_save_op $tmp3_2 qua_op | null
 
 	$tmp3_2 -> $算术运算
 
 	$算术运算 -> $tmp5_2 $tmp5_1
 
-	$tmp5_1 -> + $tmp5_2 qua+ $tmp5_1 | - $tmp5_2 qua- $tmp5_1 | null
+	$tmp5_1 -> + qua_save_op $tmp5_2 qua_op $tmp5_1 | - qua_save_op $tmp5_2 qua_op $tmp5_1 | null
 
 	$tmp5_2 -> $tmp5_4 $tmp5_3
 
-	$tmp5_3 -> * $tmp5_4 qua* $tmp5_3 | / $tmp5_4 qua/ $tmp5_3 | null
+	$tmp5_3 -> * qua_save_op $tmp5_4 qua_op $tmp5_3 | / qua_save_op $tmp5_4 qua_op $tmp5_3 | null
 
 	$tmp5_4 -> $tmp8
 
@@ -102,17 +98,15 @@ $自定义结构声明或定义 -> $自定义结构声明 | $自定义结构定�
 
 $自定义结构声明 -> $标识符 qua_struct_check_def qua_struct_declare
 
-$自定义结构定义 -> { qua_struct_def qua_new_synbl_struct $声明语句2 ; $声明语句块 qua_return }
+$自定义结构定义 -> { qua_struct_def qua_new_synbl_struct $声明语句2 ; $声明语句块 }
 
-$声明语句1 -> $标识符 qua_declare_id quap_id $声明语句tmp2_1
+$声明语句1 -> $标识符 $声明语句tmp2_1 qua_declare_id
 
-$声明语句tmp2_1 -> $声明语句tmp2 qua_declare | $声明语句tmp4 $声明语句tmp3
+$声明语句tmp2_1 -> $声明语句tmp2 qua_declare_id | qua_declare_id $声明语句tmp3
 
-$声明语句tmp2 -> [ $整型常量 qua_declare_arr ] | null
+$声明语句tmp2 -> [ $整型常量 qua_declare_arr ] | null qua_declare_id
 
-$声明语句tmp3 -> = $表达式 qua=
-
-$声明语句tmp4 -> null qua_declare
+$声明语句tmp3 -> = qua_save_op $表达式 qua_op
 
 $声明语句2 -> $类型 $标识符 qua_declare_id $声明语句tmp2 qua_instruct_declare
 
