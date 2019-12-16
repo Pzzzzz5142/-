@@ -5,7 +5,7 @@ with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
     for line in fl.readlines():
         if line == '\n':
             continue
-        line = line.split('->')
+        line = line.strip('\n').split('->')
         vn = line[0]
         if vn not in VN:
             VN.append(vn)
@@ -25,5 +25,7 @@ with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
                 if word[:3] != 'qua':
                     tmp1.append(word+' ')
                 tmp.append(word+' ')
+        tmp+=['\n']
+        tmp1+=['\n']
         flw.writelines(tmp)
         flwf.writelines(tmp1)
