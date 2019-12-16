@@ -123,6 +123,7 @@ public:
     {
         memset(isF,0,sizeof(isF));
         cnt = 0;
+        FirstSet.resize(40);
         getFirst(0);
         getLL1();
     }
@@ -131,6 +132,7 @@ public:
         stringstream ss(src);
         string buff;
         stack<string> stk;
+        stk.push("0");
         while (ss >> buff)
         {
             auto pp = stk.top();
@@ -154,6 +156,7 @@ public:
                 }
             }
         }
+        return;
     }
 };
 void Analysis()
@@ -161,7 +164,7 @@ void Analysis()
 }
 int main()
 {
-    ifstream fl("demo.txt");
+    ifstream fl("./Compiler/demo.txt");
     string line;
     init_Grammar();
     for(int i=0;i<Grammar.size();i++)
@@ -176,7 +179,7 @@ int main()
         }
         cout<<endl;
     }
-    fl >> line;
+    getline(fl,line);
     LL1 a(Grammar);
     a.solve(line);
 }

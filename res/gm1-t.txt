@@ -1,0 +1,47 @@
+0 -> 1 2 3 -> 4 1 | 5 1 | null
+6 -> 7 ;
+8 -> 9 | 10 11 -> 12 qua_sav_func_name qua_new_synbl qua_new_pfinfl ( 13 ) { 14 qua_endproc qua_return }
+15 -> 16 17 | null
+18 -> , 16 17 | null
+19 -> 20 21 qua_declare qua_declare_param
+22 -> 12 qua_declare_id 23 | & qua_addrParm 12 qua_declare_id
+24 -> main qua_sav_func_name ( ) { qua_new_synbl 14 qua_return }
+25 -> 26 14 | null | 27 28 29 -> 30 | 31 | 32 33 -> 34 ;
+35 -> if qua_gen_func_name qua_new_synbl ( 36 ) quaif { 14 qua_endif qua_return } 37 38 -> else qua_gen_func_name 39 | null
+40 -> { qua_new_synbl 14 qua_endifall qua_return } | 32 41 -> while qua_gen_func_name qua_new_synbl quawh ( 36 ) { quawdo 14 quawe qua_return }
+41 -> for qua_gen_func_name qua_new_synbl ( 42 ; quafor 43 quafdo ; 44 quafsav ) { 14 quafe qua_return }
+45 -> 34 | null
+46 -> 36 | null
+47 -> 34 | null
+48 -> continue qua_continue qua_check_jump ; | break qua_break qua_check_jump ;
+49 -> getc 12 qua_getc qua_check_def_e quad
+50 -> putc 51 qua_putc qua_check_def_e quad | puts 52 qua_puts
+53 -> 12 | 54 55 -> 56 | 57 58 -> 59 = 36 qua= | . 12 quap qua_member = 36 qua=
+60 -> ( qua_call 61 qua_checknum )
+62 -> 63 64 | null
+65 -> , 63 64 | null
+66 -> 12 quap qua_check_def_e 59 qua_contrast | 67 qua_contrastC
+68 -> return
+69 -> int qua_int | float qua_float | bool qua_bool | char qua_char
+70 -> 71 72 -> 73 74 75 -> > 73 qua> | >= 73 qua>= | < 73 qua< | <= 73 qua<=
+75 -> == 73 qua== | != 73 qua!= | null
+76 -> 77 78 -> 79 80 -> 81 82 83 -> + 81 qua+ 84 | - 81 qua- 84 | null
+85 -> 86 87 88 -> * 86 qua* 89 | / 86 qua/ 89 | null
+90 -> 91 92 -> 93 | ! 93 | - 93 qua.
+94 -> 12 quap qua_check_def_e 95 | 67 quap | ( 36 )
+96 -> 59 | . 12 quap qua_member
+97 -> 9 | 12 quap qua_check_def_e 98 | return qua_func_return | 99 | 100 | 10 101 -> struct qua_gen_func_name 12 qua_declare_struct_id 102 103 -> 104 | 105 106 -> 12 qua_struct_check_def qua_struct_declare
+107 -> { qua_struct_def qua_new_synbl_struct 108 ; 109 qua_return }
+110 -> 20 111 112 -> 12 qua_declare_id quap_id 113 114 -> 23 qua_declare | 115 116 117 -> [ 118 qua_declare_arr ] | null
+119 -> = 36 qua=
+120 -> null qua_declare
+121 -> 20 12 qua_declare_id 23 qua_instruct_declare
+122 -> 108 ; 109 | null
+123 -> @I
+124 -> 12 quap qua_check_def_e | 118 quap
+125 -> [ 126 ] qua[] | null
+127 -> 118 | 128 | 129 | 130 | 131 132 -> @INT
+133 -> @FLT
+134 -> @CH
+135 -> @STR
+136 -> true | false 
