@@ -10,7 +10,7 @@ with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
         if vn not in VN:
             VN.append(vn)
         vn = VN.index(vn)
-        tmp = [str(vn)+' -> ']
+        tmp = [str(vn)+' ']
         tmp1 = tmp[:]
         scent = line[1].split(' ')
         for word in scent:
