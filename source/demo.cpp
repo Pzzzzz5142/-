@@ -31,7 +31,7 @@ class LL1
 {
     vector<set<string>> FirstSet;
     vector<set<string>> LastSet;
-    vector<vector<vector<string>>> &Grammar;
+    vector<vector<vector<string>>> Grammar;
     vector<vector<vector<string>>> LL1Tb;
     map<string, int> ind;
     struct
@@ -58,7 +58,7 @@ class LL1
                 {
                     if (x[j][0] >= '0' && x[j][0] <= '9')
                     {
-                        if (x[j][0] >= '0' && x[j][0] <= '9')
+                        if (x[j+1][0] >= '0' && x[j+1][0] <= '9')
                         {
                             LastSet[stoi(x[j])].insert(FirstSet[stoi(x[j + 1])].begin(), FirstSet[stoi(x[j + 1])].end());
                         }
@@ -76,8 +76,9 @@ class LL1
         }
     }
 
-    void toposort()
+    void getLast()
     {
+        last_init();
         queue<int> que;
         for (int i = 0; i < Grammar.size(); i++)
         {
@@ -104,10 +105,10 @@ class LL1
 
     void init_Grammar()
     {
-        ifstream fl("./Compiler/res/gm1-t.txt");
+        ifstream fl("./Compiler/res/gm1-tf.txt");
         string line;
         int x = 0;
-        Grammar.resize(50);
+        Grammar.resize(200);
         while (getline(fl, line))
         {
             stringstream ss(line);
@@ -150,7 +151,7 @@ class LL1
             return;
         for (auto x : Grammar[c])
         {
-            if (x[0][0] == '(')
+            if (x[0][0] > '9' || x[0][0] < '0')
             {
                 string a = x[0];
                 if (ind.find(x[0]) == ind.end())
@@ -177,7 +178,7 @@ class LL1
             for (int j = 0; j < Grammar[i].size(); j++)
             {
                 string x = Grammar[i][j][0];
-                if (x[0] == '(')
+                if (x[0] > '9' || x[0] < '0')
                 {
                     LL1Tb[i][ind[x]] = Grammar[i][j];
                 }
@@ -202,8 +203,10 @@ public:
         totE = 0;
         memset(isF, 0, sizeof(isF));
         cnt = 0;
-        FirstSet.resize(40);
+        FirstSet.resize(200);
+        LastSet.resize(200);
         getFirst(0);
+        getLast();
         getLL1();
     }
     void solve(string src)

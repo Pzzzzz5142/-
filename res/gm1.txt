@@ -36,9 +36,7 @@ $分支结构3 -> { qua_new_synbl $函数体 qua_endifall qua_return } | $分支
 
 
 
-$循环结构 -> while qua_gen_func_name qua_new_synbl quawh ( $表达式 ) { quawdo $函数体 quawe qua_return }
-
-$循环结构 -> for qua_gen_func_name qua_new_synbl ( $for_list_0 ; quafor $for_list_1 quafdo ; $for_list_2 quafsav ) { $函数体 quafe qua_return }
+$循环结构 -> while qua_gen_func_name qua_new_synbl quawh ( $表达式 ) { quawdo $函数体 quawe qua_return } | for qua_gen_func_name qua_new_synbl ( $for_list_0 ; quafor $for_list_1 quafdo ; $for_list_2 quafsav ) { $函数体 quafe qua_return }
 
 $for_list_0 -> $语句 | null
 
@@ -76,9 +74,7 @@ $表达式 -> $关系运算
 
 	$关系运算 -> $tmp3_2 $tmp3_1
 
-	$tmp3_1 -> > $tmp3_2 qua> | >= $tmp3_2 qua>= | < $tmp3_2 qua< | <= $tmp3_2 qua<=
-
-	$tmp3_1 -> == $tmp3_2 qua== | != $tmp3_2 qua!= | null
+	$tmp3_1 -> > $tmp3_2 qua> | >= $tmp3_2 qua>= | < $tmp3_2 qua< | <= $tmp3_2 qua<= | == $tmp3_2 qua== | != $tmp3_2 qua!= | null
 
 	$tmp3_2 -> $tmp4
 

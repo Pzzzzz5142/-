@@ -6,7 +6,7 @@ with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
         if line == '\n':
             continue
         line = line.strip('\n').split('->')
-        vn = line[0]
+        vn = line[0].strip(' ').strip('\t')
         if vn not in VN:
             VN.append(vn)
         vn = VN.index(vn)
