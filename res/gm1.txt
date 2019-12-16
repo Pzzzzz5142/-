@@ -54,7 +54,7 @@ $输出字符 -> $标识符 | $字符型常量
 
 $赋值语句和函数调用 -> $赋值语句 | $函数调用
 
-$赋值语句 -> $数组方括号 = $表达式 qua= | . $标识符 quap qua_member = $表达式 qua=
+$赋值语句 -> $数组方括号 = $表达式 qua= | . $标识符 quap qua_member = $表达式 qua= | = $表达式 qua=
 
 $函数调用 -> ( qua_call $实参列表 qua_checknum )
 
@@ -76,9 +76,7 @@ $表达式 -> $关系运算
 
 	$tmp3_1 -> > $tmp3_2 qua> | >= $tmp3_2 qua>= | < $tmp3_2 qua< | <= $tmp3_2 qua<= | == $tmp3_2 qua== | != $tmp3_2 qua!= | null
 
-	$tmp3_2 -> $tmp4
-
-$tmp4 -> $算术运算
+	$tmp3_2 -> $算术运算
 
 	$算术运算 -> $tmp5_2 $tmp5_1
 
@@ -94,7 +92,7 @@ $tmp8 -> $原子结合 | ! $原子结合 | - $原子结合 qua.
 
 $原子结合 -> $标识符 quap qua_check_def_e $原子结合tmp | $常量 quap | ( $表达式 )
 
-$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member
+$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member | null
 
 $语句 -> $声明语句1 | $标识符 quap qua_check_def_e $赋值语句和函数调用 | return qua_func_return | $输出语句 | $输入语句 | $struct语句
 

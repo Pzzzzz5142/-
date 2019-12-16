@@ -37,9 +37,9 @@ class LL1
     struct
     {
         int to, nx;
-    } edge[2000];
+    } edge[200];
 
-    int head[1000], totE, support_e[1000], in[1000];
+    int head[100], totE, support_e[100], in[100];
 
     void add(int fr, int to)
     {
@@ -58,7 +58,7 @@ class LL1
                 {
                     if (x[j][0] >= '0' && x[j][0] <= '9')
                     {
-                        if (x[j+1][0] >= '0' && x[j+1][0] <= '9')
+                        if (x[j + 1][0] >= '0' && x[j + 1][0] <= '9')
                         {
                             LastSet[stoi(x[j])].insert(FirstSet[stoi(x[j + 1])].begin(), FirstSet[stoi(x[j + 1])].end());
                         }
@@ -67,10 +67,34 @@ class LL1
                             LastSet[stoi(x[j])].insert(x[j + 1]);
                         }
                     }
+                    else
+                    {
+                        if (ind.find(x[0]) == ind.end())
+                        {
+                            ind[x[0]] = Vt_num++;
+                        }
+                    }
                 }
-                if (x[x.size() - 1][0] >= '0' && x[x.size() - 1][0] <= '9')
+                int loc = x.size() - 1;
+                int flg;
+                do
                 {
-                    add(i, stoi(x[x.size() - 1]));
+                    string a = x[loc];
+                    if (x[loc][0] >= '0' && x[loc][0] <= '9')
+                    {
+                        if (stoi(a) != i)
+                            add(i, stoi(a));
+                    }
+                    else
+                        break;
+                    flg = support_e[stoi(a)];
+                    loc--;
+                    if (loc < 0)
+                        break;
+                } while (flg);
+                if (ind.find(x[0]) == ind.end())
+                {
+                    ind[x[0]] = Vt_num++;
                 }
             }
         }
@@ -100,7 +124,7 @@ class LL1
         }
     }
 
-    int cnt;
+    int Vt_num;
     int isF[100];
 
     void init_Grammar()
@@ -149,23 +173,41 @@ class LL1
     {
         if (isF[c])
             return;
+        isF[c] = 1;
         for (auto x : Grammar[c])
         {
             if (x[0][0] > '9' || x[0][0] < '0')
             {
                 string a = x[0];
-                if (ind.find(x[0]) == ind.end())
-                {
-                    ind[x[0]] = cnt++;
-                }
                 FirstSet[c].insert(a);
             }
             else
             {
                 cout << x[0] << endl;
-                string a = x[0];
-                getFirst(stoi(a));
-                FirstSet[c].insert(FirstSet[stoi(a)].begin(), FirstSet[stoi(a)].end());
+                int loc = 0;
+                string a = x[loc];
+                int flg;
+                int xx=0;
+                do
+                {
+                    if (!isF[stoi(a)])
+                        getFirst(stoi(a));
+                    FirstSet[c].insert(FirstSet[stoi(a)].begin(), FirstSet[stoi(a)].end());
+                    flg = support_e[stoi(a)];
+                    xx+=flg;
+                    loc++;
+                    if (loc >= x.size())
+                        break;
+                    a = x[loc];
+                    if (a[0] > '9' || a[0] < '0')
+                    {
+                        if (flg)
+                            FirstSet[c].insert(a);
+                        break;
+                    }
+                } while (flg);
+                if(xx==x.size())
+                    support_e[c]=1;
             }
         }
     }
@@ -174,7 +216,7 @@ class LL1
         LL1Tb.resize(Grammar.size());
         for (int i = 0; i < Grammar.size(); i++)
         {
-            LL1Tb[i].resize(cnt);
+            LL1Tb[i].resize(Vt_num);
             for (int j = 0; j < Grammar[i].size(); j++)
             {
                 string x = Grammar[i][j][0];
@@ -184,10 +226,32 @@ class LL1
                 }
                 else
                 {
-                    for (auto y : FirstSet[stoi(x)])
+                    int loc = 0;
+                    string a = Grammar[i][j][loc];
+                    int flg;
+                    do
                     {
-                        LL1Tb[i][ind[y]] = Grammar[i][j];
-                    }
+                        for (auto y : FirstSet[stoi(a)])
+                        {
+                            LL1Tb[i][ind[y]] = Grammar[i][j];
+                        }
+                        flg = support_e[stoi(a)];
+                        if (++loc < Grammar[i][j].size())
+                            a = Grammar[i][j][loc];
+                        else
+                        {
+                            if (flg)
+                                LL1Tb[i][ind[a]] = Grammar[i][j];
+                            break;
+                        }
+                    } while (a[0] >= '0' && a[0] <= '9' && flg);
+                }
+            }
+            if (support_e[i])
+            {
+                for (auto x : LastSet[i])
+                {
+                    LL1Tb[i][ind[x]] = {"!"};
                 }
             }
         }
@@ -196,16 +260,17 @@ class LL1
 public:
     LL1()
     {
-        init_Grammar();
         memset(support_e, 0, sizeof(support_e));
+        init_Grammar();
         memset(in, 0, sizeof(in));
         memset(head, -1, sizeof(head));
         totE = 0;
         memset(isF, 0, sizeof(isF));
-        cnt = 0;
+        Vt_num = 0;
         FirstSet.resize(200);
         LastSet.resize(200);
-        getFirst(0);
+        for (int i = 0; i < Grammar.size(); i++)
+            getFirst(i);
         getLast();
         getLL1();
     }
@@ -214,27 +279,67 @@ public:
         stringstream ss(src);
         string buff;
         stack<string> stk;
-        stk.push("0");
+        stack<string> sem;
+        queue<string> buff_que;
         while (ss >> buff)
         {
+            buff_que.push(buff);
+        }
+        stk.push("0");
+        while (!buff_que.empty())
+        {
             auto pp = stk.top();
-            stk.pop();
-            if (pp[0] == '(')
+            auto buff = buff_que.front();
+            if (pp[0] > '9' || pp[0] < '0')
             {
-                if (pp[1] == 'f')
-                    dfun(pp);
-                else if (pp != buff)
+                while (pp[0] > '9' || pp[0] < '0')
                 {
-                    cerr << "WA!" << endl;
-                    exit(1);
+                    stk.pop();
+                    if (pp == "!")
+                    {
+                    }
+                    else if (pp.size() > 2 && pp[0] == 'q' && pp[1] == 'u' && pp[2] == 'a')
+                        dfun(pp);
+                    else if (pp != buff)
+                    {
+                        cerr << "WA!" << endl;
+                        exit(1);
+                    }
+                    else
+                    {
+                        buff_que.pop();
+                        if (buff_que.empty())
+                        {
+                            if (stk.empty())
+                            {
+                                cout << "OK!" << endl;
+                                return;
+                            }
+                            else
+                            {
+                                cerr << "WA!" << endl;
+                                exit(1);
+                            }
+                        }
+                        buff = buff_que.front();
+                    }
+                    pp = stk.top();
                 }
             }
             else
             {
+                stk.pop();
                 int t = ind[buff], num = stoi(pp);
+                int ff = 0;
                 for (int i = LL1Tb[num][t].size() - 1; i > -1; i--)
                 {
                     stk.push(LL1Tb[num][t][i]);
+                    ff = 1;
+                }
+                if (ff == 0)
+                {
+                    cerr << num << ' ' << buff << endl;
+                    cerr << "WA!" << endl;
                 }
             }
         }
