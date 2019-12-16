@@ -1,0 +1,1 @@
+struct @I { int @I ; } ;  int  main ( ) {    int @I ; int @I ; @I = ( @I + @I ) * @I + @I ; for ( @I ; @I < @I ; @I = @I ) { @I = @I + @I ; } }
