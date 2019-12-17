@@ -1,18 +1,18 @@
 0 1 
 1 2 3 4 1 | 5 1 | null 
 5 6 ; 
-4 qua_fuc_init ( 7 ) { 8 } | 9 ; 
+4 qua_fuc_init ( 7 ) { 8 qua_return } | 9 ; 
 7 10 11 | null 
 11 , 10 11 | null 
 10 2 12 
 12 3 qua_declare_param 13 
 8 14 8 | 15 8 | null 
 14 16 | 17 | 18 
-16 19 ; 
-18 if ( 20 ) qua_if1 { 8 qua_if2 } 21 
-21 else qua_el 22 | null qua_endif 
-22 { 8 qua_ee } | 18 
-17 while qua_wh1 ( 20 ) { qua_wh2 8 qua_wh3 } | for qua_gen_func_name qua_new_synbl ( 23 ; quafor 24 quafdo ; 25 quafsav ) { 8 quafe } 
+16 19 qua_pop_type ; 
+18 if ( 20 ) qua_if1 { 8 qua_if2 } 21 qua_endif 
+21 else 22 | null 
+22 qua_el { 8 qua_ee } | 18 
+17 while qua_wh1 ( 20 ) { qua_wh2 8 qua_wh3 } | for ( 23 ; quafor 24 quafdo ; 25 quasav ) { 8 quafe } 
 23 19 | null 
 24 20 | null 
 25 19 | null 
