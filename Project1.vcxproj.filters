@@ -15,53 +15,50 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="源.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Turing.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LL1a.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BackPoint.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Turing.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="LL1a.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BackPoint.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="gm1-t.txt">
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1-t.txt">
       <Filter>资源文件</Filter>
     </Text>
-    <Text Include="gm1-tf.txt">
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1-tf.txt">
       <Filter>资源文件</Filter>
     </Text>
-    <Text Include="gm1 copy.txt">
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1 copy.txt">
       <Filter>资源文件</Filter>
     </Text>
-    <Text Include="gm1.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="demo.txt">
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="gm2">
+    <None Include="D:\OneDrive\VSCode\C++\Compiler\res\gm2">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="gm-t">
+    <None Include="D:\OneDrive\VSCode\C++\Compiler\res\gm-t">
       <Filter>资源文件</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\源.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BackPoint.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LL1a.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Turing.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header\LL1a.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Turing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="header\BackPoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

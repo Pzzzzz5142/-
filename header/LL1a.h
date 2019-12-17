@@ -653,7 +653,7 @@ class LL1
 
 	void init_stk_id()
 	{
-		ifstream fl("./ids");
+		ifstream fl("./res/ids");
 		string buff;
 		while (fl >> buff)
 		{
@@ -663,8 +663,8 @@ class LL1
 
 	void init_Grammar()
 	{
-		ifstream fl("gm1-tf.txt");
-		ifstream tfl("gm1-t.txt");
+		ifstream fl("./res/gm1-tf.txt");
+		ifstream tfl("./res/gm1-t.txt");
 		string line;
 		string tline;
 		int x = 0;

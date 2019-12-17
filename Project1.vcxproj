@@ -18,6 +18,27 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1 copy.txt" />
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1-t.txt" />
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1-tf.txt" />
+    <Text Include="D:\OneDrive\VSCode\C++\Compiler\res\gm1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\OneDrive\VSCode\C++\Compiler\res\gm-t" />
+    <None Include="D:\OneDrive\VSCode\C++\Compiler\res\gm2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\BackPoint.cpp" />
+    <ClCompile Include="source\LL1a.cpp" />
+    <ClCompile Include="source\Turing.cpp" />
+    <ClCompile Include="source\源.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="header\BackPoint.h" />
+    <ClInclude Include="header\LL1a.h" />
+    <ClInclude Include="header\Turing.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{9C533C22-21C3-4F8C-B6EC-4DC01878F6EB}</ProjectGuid>
@@ -69,7 +90,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\Pzzzzz\source\repos\Project1\header;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\Pzzzzz\source\repos\Project1\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -122,28 +146,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="BackPoint.cpp" />
-    <ClCompile Include="LL1a.cpp" />
-    <ClCompile Include="Turing.cpp" />
-    <ClCompile Include="源.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BackPoint.h" />
-    <ClInclude Include="LL1a.h" />
-    <ClInclude Include="Turing.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="demo.txt" />
-    <Text Include="gm1 copy.txt" />
-    <Text Include="gm1-t.txt" />
-    <Text Include="gm1-tf.txt" />
-    <Text Include="gm1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="gm-t" />
-    <None Include="gm2" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
