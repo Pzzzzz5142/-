@@ -16,7 +16,8 @@ struct SynblNode
 	int type;
 	int cat;
 	int addr;
-	int init_val;
+	int len;
+	string init_val;
 }; //符号表总表的结构体
 
 struct TapelNode
@@ -37,6 +38,7 @@ struct PfinflNode
 {
 	int off;
 	int entry;
+	int ed;
 	vector<SynblNode> param;
 }; //函数表的结构体
 
@@ -82,8 +84,10 @@ struct SymbolTableNode
 	vector<TapelNode> TAPEL; //类型表
 	vector<AinflNode> AINFL; //数组表
 	bool link;
+	int len;
 	SymbolTableNode(int link_ = 0) : link(link_)
 	{
+		len = 0;
 	}
 };
 
@@ -99,12 +103,6 @@ class LL1
 
 	vector<SymbolTableNode> SYMBOLTABEL; //符号表的数组
 
-	vector<SynblNode> SYNBL;     //符号总表
-	vector<TapelNode> TAPEL;     //类型表
-	vector<AinflNode> AINFL;     //数组表
-	vector<PfinflNode> PFINFL;   //函数表
-	vector<SynblNode> PARAMETER; //参数表
-	vector<int> LENL;            //长度表
 	stack<string> opl;
 	int add_allocate_num = 1;
 	int func_num = 0;
@@ -131,17 +129,11 @@ class LL1
 	stack<bre> brestack;     //
 	stack<int> constack;
 
-	int new_add()
+	int new_add(int len)
 	{
-		if (isRun)
-		{
-			return add_allocate_num++;
-		}
-		else
-		{
-			int tmp = add_allocate_num++;
-			return -tmp;
-		}
+		int tmp = add_allocate_num;
+		add_allocate_num += len;
+		return tmp;
 	}
 
 	void qua_declare_id(string name) //声明变量
@@ -152,7 +144,8 @@ class LL1
 		TAPEL.push_back(TapelNode());
 		node.type = type;
 		node.cat = TYP;
-		node.addr = new_add();
+		node.len = 1;
+		node.addr = new_add(node.len);
 
 		if (nowTable == -1)
 		{
@@ -186,6 +179,10 @@ class LL1
 		if (FUNSYMBEL.size() <= backfun.top())
 			FUNSYMBEL.resize(backfun.top() + 1);
 		FUNSYMBEL[backfun.top()] = SYMBOLTABEL[SYMBOLTABEL.size() - 1];
+		for (auto x : SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL)
+		{
+			SYMBOLTABEL[SYMBOLTABEL.size() - 1].len += x.len;
+		}
 		SYMBOLTABEL.pop_back();
 		nowTable--;
 		backfun.pop();
@@ -320,6 +317,7 @@ class LL1
 	int find(string name)
 	{
 		int flg = 0;
+
 		for (int i = SYMBOLTABEL.size() - 1; i > -1; i--)
 		{
 			if (flg)
@@ -434,11 +432,25 @@ class LL1
 		add_allocate_num = 1;
 		SYNBL[j].type = type;
 		SYNBL[j].cat = FUN;
+		SYNBL[j].len = 0;
 		PFINFL.push_back(PfinflNode());
 		SYMBOLTABEL.push_back(SymbolTableNode(0));
 		nowTable++;
 		int k = PFINFL.size() - 1;
+		PFINFL[k].entry = QT.size() - 1;
 		SYNBL[j].addr = k;
+	}
+
+	void endfun()
+	{
+		QT.push_back(QtNode());
+		QT[QT.size() - 1].a.x = 0;
+		QT[QT.size() - 1].a.y = "edfun";
+		QT[QT.size() - 1].b.x = backfun.top();
+		QT[QT.size() - 1].c.x = -1;
+		QT[QT.size() - 1].d.x = -1;
+		PFINFL[PFINFL.size() - 1].ed = QT.size();
+		qua_return();
 	}
 
 	void qua_declare_param(string name) //关于形参1
@@ -447,6 +459,7 @@ class LL1
 		SynblNode node;
 		node.cat = TYP;
 		node.name = name;
+		node.len = 1;
 		TAPEL.push_back(TapelNode());
 		for (auto x : SYNBL)
 		{
@@ -457,7 +470,8 @@ class LL1
 			}
 		}
 		node.type = type;
-		node.addr = new_add();
+		node.addr = new_add(node.len);
+		SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL.push_back(node);
 		loc.param.push_back(node);
 	}
 
@@ -808,6 +822,10 @@ class LL1
 		{
 			wh3();
 		}
+		else if (a == "qua_endfun")
+		{
+			endfun();
+		}
 	}
 	void getFirst(int c)
 	{
@@ -910,6 +928,12 @@ class LL1
 public:
 	vector<SymbolTableNode> FUNSYMBEL;
 	vector<QtNode> QT;
+	vector<SynblNode> SYNBL;     //符号总表
+	vector<TapelNode> TAPEL;     //类型表
+	vector<AinflNode> AINFL;     //数组表
+	vector<PfinflNode> PFINFL;   //函数表
+	vector<SynblNode> PARAMETER; //参数表
+	vector<int> LENL;            //长度表
 	LL1()
 	{
 		memset(support_e, 0, sizeof(support_e));

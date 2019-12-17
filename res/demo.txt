@@ -1,1 +1,1 @@
-int @I ; int  @I ( ) {    int @I ; int @I ; while ( @I < @I ) { int @I ; @I = @I + @I ; } }
+int  @I ( ) {    int @I ; int @I ;  if ( @I < @I ) { @I = @I + @I ;  } }
