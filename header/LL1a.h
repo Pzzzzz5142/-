@@ -107,6 +107,7 @@ class LL1
 	int add_allocate_num = 1;
 	int func_num = 0;
 	string t_name;
+	int ttp;
 	stack<int> backfun;
 	stack<int> add_stk;
 
@@ -347,35 +348,17 @@ class LL1
 		}
 	}
 
-	int get_addr(string name)
+	PfinflNode get_func(string name)
 	{
-		int flg = 0;
-
-		for (int i = SYMBOLTABEL.size() - 1; i > -1; i--)
+		for (auto x : SYNBL)
 		{
-			for (auto x : SYMBOLTABEL[i].SYNBL)
+			if (x.name == name)
 			{
-				if (x.name == name)
-				{
-					return x.addr;
-				}
+				return PFINFL[x.addr];
 			}
-			if (SYMBOLTABEL[i].link == 0)
-				break;
 		}
-		if (!flg)
-			for (auto x : SYNBL)
-			{
-				if (x.name == name)
-				{
-					return x.addr;
-				}
-			}
-		if (flg == 0)
-		{
-			cerr << "Not found " << SEM.top().y << endl;
-			exit(1);
-		}
+		cerr << "Not found " << SEM.top().y << endl;
+		exit(1);
 	}
 
 	void save_type()
@@ -403,17 +386,76 @@ class LL1
 
 	void call(string name)
 	{
-
+		PfinflNode tmp = get_func(name);
+		if (par_cnt != tmp.param.size())
+		{
+			cerr << "The para num for function: " << name << " is not enough!" << endl;
+			exit(1);
+		}
+		QtNode tt;
+		tt.a.x = 0;
+		tt.a.y = "call";
+		tt.b.x = 0;
+		tt.b.y = name;
+		tt.c.x = -1;
+		tt.d.x = -1;
+		QT.push_back(tt);
 	}
 
-	void saveP(string name)
+	void saveP(string name, string fun__name)
 	{
+		PfinflNode fun = get_func(fun__name);
 		QtNode tmp;
 		tmp.a.x = 0;
 		tmp.a.y = "SVP";
 		tmp.b.x = 0;
 		tmp.b.y = name;
+		if (par_cnt >= fun.param.size())
+		{
+			cerr << "Param num more than enough" << endl;
+			exit(1);
+		}
+		check_tp(find(name), fun.param[par_cnt].type);
 		par_cnt++;
+	}
+
+	void return_init()
+	{
+		ttp = 0;
+	}
+
+	void qua_return()
+	{
+		QtNode tmp;
+		tmp.a.x = 0;
+		tmp.a.y = "ret";
+		if (ttp == 0)
+		{
+			tmp.b.x = -1;
+		}
+		else
+		{
+			tmp.b = SEM.top();
+			SEM.pop();
+		}
+		tmp.c.x = -1;
+		tmp.d.x = -1;
+		QT.push_back(tmp);
+	}
+
+	void reth()
+	{
+		ttp = 1;
+	}
+
+	bool check_tp(int a,int b)
+	{
+		if (a != b)
+		{
+			cerr << "Wrong type!" << endl;
+			exit(1);
+		}
+		return true;
 	}
 
 	void GEQ(string op)
@@ -430,6 +472,7 @@ class LL1
 			SEM.pop();
 			QT[QT.size() - 1].b = SEM.top();
 			tp2 = find(SEM.top().y);
+			check_tp(tp1, tp2);
 			SEM.pop();
 			QT[QT.size() - 1].d.y = "#t";
 			QT[QT.size() - 1].d.x = num;
@@ -872,6 +915,30 @@ class LL1
 		else if (a == "qua_endfun")
 		{
 			endfun();
+		}
+		else if (a == "qua_call_init")
+		{
+			call_init(pre);
+		}
+		else if (a == "qua_return")
+		{
+			qua_return();
+		}
+		else if (a == "qua_return_init")
+		{
+			return_init();
+		}
+		else if (a == "qua_saveP")
+		{
+			saveP(pre, t_name);
+		}
+		else if (a == "qua_reth")
+		{
+			reth();
+		}
+		else if (a == "qua_call")
+		{
+			call(pre);
 		}
 	}
 	void getFirst(int c)
