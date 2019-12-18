@@ -106,6 +106,7 @@ class LL1
 	stack<string> opl;
 	int add_allocate_num = 1;
 	int func_num = 0;
+	string t_name;
 	stack<int> backfun;
 	stack<int> add_stk;
 
@@ -116,6 +117,7 @@ class LL1
 	string pre;
 	bool isRun;
 	int nowTable = -1;
+	int par_cnt;
 
 	struct bre
 	{
@@ -320,19 +322,11 @@ class LL1
 
 		for (int i = SYMBOLTABEL.size() - 1; i > -1; i--)
 		{
-			if (flg)
-				break;
 			for (auto x : SYMBOLTABEL[i].SYNBL)
 			{
 				if (x.name == name)
 				{
-					if (x.cat == TYP)
-					{
-						flg = 1;
-						break;
-					}
-					cerr << "Wrong type!" << endl;
-					exit(1);
+					return x.type;
 				}
 			}
 			if (SYMBOLTABEL[i].link == 0)
@@ -343,13 +337,38 @@ class LL1
 			{
 				if (x.name == name)
 				{
-					if (x.cat == TYP)
-					{
-						flg = 1;
-						break;
-					}
-					cerr << "Wrong type!" << endl;
-					exit(1);
+					return x.type;
+				}
+			}
+		if (flg == 0)
+		{
+			cerr << "Not found " << SEM.top().y << endl;
+			exit(1);
+		}
+	}
+
+	int get_addr(string name)
+	{
+		int flg = 0;
+
+		for (int i = SYMBOLTABEL.size() - 1; i > -1; i--)
+		{
+			for (auto x : SYMBOLTABEL[i].SYNBL)
+			{
+				if (x.name == name)
+				{
+					return x.addr;
+				}
+			}
+			if (SYMBOLTABEL[i].link == 0)
+				break;
+		}
+		if (!flg)
+			for (auto x : SYNBL)
+			{
+				if (x.name == name)
+				{
+					return x.addr;
 				}
 			}
 		if (flg == 0)
@@ -367,6 +386,34 @@ class LL1
 			type = CHAR;
 		else if (pre == "bool")
 			type = BOOL;
+	}
+
+	void call_init(string name)
+	{
+		par_cnt = 0;
+		QtNode tmp;
+		tmp.a.x = 0;
+		tmp.a.y = "INIP";
+		tmp.b.x = -1;
+		tmp.c.x = -1;
+		tmp.d.x = -1;
+		QT.push_back(tmp);
+		t_name = name;
+	}
+
+	void call(string name)
+	{
+
+	}
+
+	void saveP(string name)
+	{
+		QtNode tmp;
+		tmp.a.x = 0;
+		tmp.a.y = "SVP";
+		tmp.b.x = 0;
+		tmp.b.y = name;
+		par_cnt++;
 	}
 
 	void GEQ(string op)

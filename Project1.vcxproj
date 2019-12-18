@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -93,6 +93,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>C:\Users\Pzzzzz\source\repos\Project1\header;$(IncludePath)</IncludePath>
     <SourcePath>C:\Users\Pzzzzz\source\repos\Project1\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>C:\Users\Pzzzzz\source\repos\Simple-Compiler\header;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Pzzzzz\source\repos\Simple-Compiler\source;$(SourcePath)</SourcePath>
+    <IncludePath>C:\Users\Pzzzzz\source\repos\Simple-Compiler\header;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
