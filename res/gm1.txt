@@ -32,7 +32,7 @@ $分支结构3 -> qua_el { $函数体 qua_ee } | $分支结构1
 
 
 
-$循环结构 -> while qua_wh1 ( $表达式 ) { qua_wh2 $函数体 qua_wh3 } | for ( $for_list_0 ; quafor $for_list_1 quafdo ; $for_list_2 quasav ) { $函数体 quafe }
+$循环结构 -> while qua_wh1 ( $表达式 ) { qua_wh2 $函数体 qua_wh3 } | for ( $for_list_0 ; quafor $for_list_1 quafdo ; qua_ss $for_list_2 quasav ) { $函数体 quafe }
 
 $for_list_0 -> $语句 | null
 
@@ -48,7 +48,7 @@ $输出语句 -> putc $输出字符 qua_putc qua_check_def_e quad | puts $字符
 
 $输出字符 -> $标识符 | $字符型常量
 
-$赋值语句 -> quap $赋值语句tmp | null
+$赋值语句 -> quap $赋值语句tmp | $函数调用 | null
 
 $赋值语句tmp -> $数组方括号 = qua_save_op $表达式 qua_op | . $标识符 quap qua_member = qua_save_op $表达式 qua_op | = qua_save_op $表达式 qua_op
 
@@ -88,7 +88,7 @@ $tmp8 -> $原子结合 | ! $原子结合 | - $原子结合 qua.
 
 $原子结合 -> $标识符 quap qua_check_def_e $原子结合tmp | $常量 quap | ( $表达式 )
 
-$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member | qua_call_init ( $实参列表 qua_call ) | null
+$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member | $函数调用 | null
 
 $语句 -> $类型 $声明语句1 | $标识符 $赋值语句 | return qua_return_init $返回值 qua_fun_return | $输出语句 | $输入语句 | $struct语句
 

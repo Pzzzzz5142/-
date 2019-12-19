@@ -12,7 +12,7 @@
 18 if ( 20 ) qua_if1 { 8 qua_if2 } 21 qua_endif 
 21 else 22 | null 
 22 qua_el { 8 qua_ee } | 18 
-17 while qua_wh1 ( 20 ) { qua_wh2 8 qua_wh3 } | for ( 23 ; quafor 24 quafdo ; 25 quasav ) { 8 quafe } 
+17 while qua_wh1 ( 20 ) { qua_wh2 8 qua_wh3 } | for ( 23 ; quafor 24 quafdo ; qua_ss 25 quasav ) { 8 quafe } 
 23 19 | null 
 24 20 | null 
 25 19 | null 
@@ -20,12 +20,12 @@
 26 getc 3 qua_getc qua_check_def_e quad 
 27 putc 28 qua_putc qua_check_def_e quad | puts 29 qua_puts 
 28 3 | 30 
-31 quap 32 quap | null 
-32 33 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
-34 qua_call_init ( 35 qua_call ) 
+31 quap 32 | 33 | null 
+32 34 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
+33 qua_call_init ( 35 qua_call ) 
 35 36 37 | null 
 37 , 36 37 | null 
-36 3 33 qua_saveP | 38 qua_contrastC 
+36 3 34 qua_saveP | 38 qua_contrastC 
 39 20 qua_reth | null 
 2 int qua_save_type | float qua_save_type | bool qua_save_type | char qua_save_type 
 20 40 
@@ -39,7 +39,7 @@
 46 48 
 48 49 | ! 49 | - 49 qua. 
 49 3 quap qua_check_def_e 50 | 38 quap | ( 20 ) 
-50 33 | . 3 quap qua_member | qua_pop qua_call_init ( 35 qua_call ) | null 
+50 34 | . 3 quap qua_member | 33 | null 
 19 2 51 | 3 31 | return qua_return_init 39 qua_fun_return | 27 | 26 | 6 
 6 struct qua_gen_func_name 3 qua_declare_struct_id 52 
 52 53 | 54 
@@ -53,7 +53,7 @@
 56 55 ; 56 | null 
 3 @I 
 59 3 quap qua_check_def_e | 58 quap 
-33 [ 59 ] qua[] | null 
+34 [ 59 ] qua[] | null 
 38 58 | 60 | 61 | 30 | 29 
 58 @INT 
 60 @FLT 

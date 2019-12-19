@@ -121,6 +121,7 @@ class LL1
 	bool isRun;
 	int nowTable = -1;
 	int par_cnt;
+	int flo;
 
 	struct bre
 	{
@@ -255,6 +256,7 @@ class LL1
 		QT[QT.size() - 1].a.y = "else";
 		QT[QT.size() - 1].b.x = -1;
 		QT[QT.size() - 1].c.x = func_num;
+		QT[QT.size() - 1].d.x = -1;
 		backfun.push(func_num++);
 		SYMBOLTABEL.push_back(SymbolTableNode(1));
 		nowTable++;
@@ -269,6 +271,7 @@ class LL1
 		QT[QT.size() - 1].a.y = "ee";
 		QT[QT.size() - 1].b.x = -1;
 		QT[QT.size() - 1].c.x = -1;
+		QT[QT.size() - 1].d.x = -1;
 		QT[backaddress.top()].d.x = QT.size();
 		backaddress.pop();
 		qua_return();
@@ -391,7 +394,8 @@ class LL1
 		tmp.a.x = 0;
 		tmp.a.y = "INIP";
 		tmp.b.x = -1;
-		tmp.c.x = -1;
+		tmp.c.x = 0;
+		tmp.c.y = name;
 		tmp.d.x = -1;
 		QT.push_back(tmp);
 		t_name = name;
@@ -600,10 +604,6 @@ class LL1
 		QT[QT.size() - 1].c.x = func_num;
 		QT[QT.size() - 1].d.x = -1;
 		backfun.push(func_num++);
-		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
-		SYMBOLTABEL.push_back(SymbolTableNode(1));
-		nowTable++;
 		constack.push(QT.size() - 1);
 	}
 	void quafdo()
@@ -616,6 +616,10 @@ class LL1
 		qua_pop();
 		brestack.push({ int(QT.size() - 1), 1 });
 	}
+	void qua_ss()
+	{
+		flo = QT.size();
+	}
 	void quafsav()
 	{
 		QT.push_back(QtNode());
@@ -625,6 +629,13 @@ class LL1
 		QT[QT.size() - 1].b.y = -1;
 		QT[QT.size() - 1].c.x = -1;
 		QT[QT.size() - 1].d.x = constack.top();
+		add_stk.push(add_allocate_num);
+		add_allocate_num = 1;
+		SYMBOLTABEL.push_back(SymbolTableNode(1));
+		nowTable++;
+		constack.pop();
+		constack.push(flo);
+
 		QT[brestack.top().a].c.x = QT.size();
 		qua_pop();
 	}
@@ -922,6 +933,10 @@ class LL1
 		{
 			quafsav();
 		}
+		else if (a == "qua_ss")
+		{
+			qua_ss();
+		}
 		else if (a == "quafe")
 		{
 			quafe();
@@ -1124,6 +1139,7 @@ public:
 					else if (pp != buff)
 					{
 						cerr << "WA!" << endl;
+						cerr << "Expect " << '\'' << pp << "\' but get " << buff;
 						exit(1);
 					}
 					else
