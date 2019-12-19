@@ -48,19 +48,19 @@ $输出语句 -> putc $输出字符 qua_putc qua_check_def_e quad | puts $字符
 
 $输出字符 -> $标识符 | $字符型常量
 
-$赋值语句和函数调用 -> $赋值语句 | $函数调用 | null
+$赋值语句 -> quap $赋值语句tmp | null
 
-$赋值语句 -> $数组方括号 = qua_save_op $表达式 qua_op | . $标识符 quap qua_member = qua_save_op $表达式 qua_op | = qua_save_op $表达式 qua_op
+$赋值语句tmp -> $数组方括号 = qua_save_op $表达式 qua_op | . $标识符 quap qua_member = qua_save_op $表达式 qua_op | = qua_save_op $表达式 qua_op
 
-$函数调用 -> ( qua_call $实参列表 qua_checknum )
+$函数调用 -> qua_call_init ( $实参列表 qua_call )
 
 $实参列表 -> $实参 $其他实参 | null
 
 $其他实参 -> , $实参 $其他实参 | null
 
-$实参 -> $标识符 quap qua_check_def_e $数组方括号 qua_contrast | $常量 qua_contrastC
+$实参 -> $标识符 $数组方括号 qua_saveP | $常量 qua_contrastC
 
-$跳转语句 -> return
+$返回值 -> $表达式 qua_reth | null
 
 $类型 -> int qua_save_type | float qua_save_type | bool qua_save_type | char qua_save_type
 
@@ -88,9 +88,9 @@ $tmp8 -> $原子结合 | ! $原子结合 | - $原子结合 qua.
 
 $原子结合 -> $标识符 quap qua_check_def_e $原子结合tmp | $常量 quap | ( $表达式 )
 
-$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member | null
+$原子结合tmp -> $数组方括号 | . $标识符 quap qua_member | qua_call_init ( $实参列表 qua_call ) | null
 
-$语句 -> $类型 $声明语句1 | $标识符 quap qua_check_def_e $赋值语句和函数调用 | return qua_func_return | $输出语句 | $输入语句 | $struct语句
+$语句 -> $类型 $声明语句1 | $标识符 $赋值语句 | return qua_return_init $返回值 qua_fun_return | $输出语句 | $输入语句 | $struct语句
 
 $struct语句 -> struct qua_gen_func_name $标识符 qua_declare_struct_id $自定义结构声明或定义
 

@@ -55,6 +55,7 @@ struct SemNode
 			out << a.x;
 			return out;
 		}
+
 		if (a.x == 0 && a.y != "")
 			out << a.y;
 		else if (a.x == -1)
@@ -116,6 +117,7 @@ class LL1
 	int num;
 	string id;
 	string pre;
+	int fun_type;
 	bool isRun;
 	int nowTable = -1;
 	int par_cnt;
@@ -131,6 +133,11 @@ class LL1
 	stack<int> backaddress2; //存放待填写的位置
 	stack<bre> brestack;     //
 	stack<int> constack;
+
+	void qua_pop()
+	{
+		SEM.pop();
+	}
 
 	int new_add(int len)
 	{
@@ -221,7 +228,7 @@ class LL1
 		QT[QT.size() - 1].c.x = func_num;
 		backfun.push(func_num++);
 		QT[QT.size() - 1].d.x = -1;
-		SEM.pop();
+		qua_pop();
 		add_stk.push(add_allocate_num);
 		add_allocate_num = 1;
 		backaddress.push(QT.size() - 1);
@@ -296,7 +303,7 @@ class LL1
 		QT[QT.size() - 1].b.x = SEM.top().x;
 		QT[QT.size() - 1].b.y = SEM.top().y;
 		QT[QT.size() - 1].c.x = -1;
-		SEM.pop();
+		qua_pop();
 		add_stk.push(add_allocate_num);
 		add_allocate_num = 1;
 		SYMBOLTABEL.push_back(SymbolTableNode(1));
@@ -317,10 +324,14 @@ class LL1
 		qua_return();
 	}
 
-	int find(string name)
+	int find(SemNode a)
 	{
+		string name;
+		if (a.y[0] == '#')
+			name = a.y + to_string(a.x);
+		else
+			name = a.y;
 		int flg = 0;
-
 		for (int i = SYMBOLTABEL.size() - 1; i > -1; i--)
 		{
 			for (auto x : SYMBOLTABEL[i].SYNBL)
@@ -352,12 +363,12 @@ class LL1
 	{
 		for (auto x : SYNBL)
 		{
-			if (x.name == name)
+			if (x.name == name && x.cat == FUN)
 			{
 				return PFINFL[x.addr];
 			}
 		}
-		cerr << "Not found " << SEM.top().y << endl;
+		cerr << "Not found " << name << endl;
 		exit(1);
 	}
 
@@ -369,6 +380,8 @@ class LL1
 			type = CHAR;
 		else if (pre == "bool")
 			type = BOOL;
+		else if (pre == "void")
+			type = VOID;
 	}
 
 	void call_init(string name)
@@ -400,6 +413,13 @@ class LL1
 		tt.c.x = -1;
 		tt.d.x = -1;
 		QT.push_back(tt);
+		tt.a = { 0,"=" };
+		qua_declare_id("#t" + to_string(num));
+		tt.b = { num,"#t" };
+		SEM.push({ num++,"#t" });
+		tt.c.x = -1;
+		tt.d = { 0,"#DX" };
+		QT.push_back(tt);
 	}
 
 	void saveP(string name, string fun__name)
@@ -410,13 +430,16 @@ class LL1
 		tmp.a.y = "SVP";
 		tmp.b.x = 0;
 		tmp.b.y = name;
+		tmp.c.x = -1;
+		tmp.d.x = -1;
 		if (par_cnt >= fun.param.size())
 		{
 			cerr << "Param num more than enough" << endl;
 			exit(1);
 		}
-		check_tp(find(name), fun.param[par_cnt].type);
+		check_tp(find({ 0,name }), fun.param[par_cnt].type);
 		par_cnt++;
+		QT.push_back(tmp);
 	}
 
 	void return_init()
@@ -424,19 +447,22 @@ class LL1
 		ttp = 0;
 	}
 
-	void qua_return()
+	void qua_fun_return()
 	{
 		QtNode tmp;
 		tmp.a.x = 0;
 		tmp.a.y = "ret";
-		if (ttp == 0)
+		tmp.b.x = -1;
+		if (ttp != 0)
 		{
-			tmp.b.x = -1;
-		}
-		else
-		{
-			tmp.b = SEM.top();
-			SEM.pop();
+			QtNode tmp2;
+			tmp2.a = { 0,"=" };
+			tmp2.b = { 0,"#DX" };
+			//RETT_stk.push_back(fun_type);
+			tmp2.c.x = -1;
+			tmp2.d = SEM.top();
+			qua_pop();
+			QT.push_back(tmp2);
 		}
 		tmp.c.x = -1;
 		tmp.d.x = -1;
@@ -448,9 +474,9 @@ class LL1
 		ttp = 1;
 	}
 
-	bool check_tp(int a,int b)
+	bool check_tp(int a, int b)
 	{
-		if (a != b)
+		if (a > 0 || b > 0 || a == VOID || b == VOID)
 		{
 			cerr << "Wrong type!" << endl;
 			exit(1);
@@ -468,32 +494,32 @@ class LL1
 		{
 			QT[QT.size() - 1].c = SEM.top();
 			int tp1, tp2;
-			tp1 = find(SEM.top().y);
-			SEM.pop();
+			tp1 = find(SEM.top());
+			qua_pop();
 			QT[QT.size() - 1].b = SEM.top();
-			tp2 = find(SEM.top().y);
+			tp2 = find(SEM.top());
 			check_tp(tp1, tp2);
-			SEM.pop();
+			qua_pop();
 			QT[QT.size() - 1].d.y = "#t";
 			QT[QT.size() - 1].d.x = num;
 			type = tp1;
 			qua_declare_id("#t" + to_string(num));
+			SEM.push(QT[QT.size() - 1].d);
 			num++;
 		}
 		else
 		{
 			QT[QT.size() - 1].d = SEM.top();
 			int tp1, tp2;
-			if (SEM.top().y[0] != '#')
-				tp1 = find(SEM.top().y);
-			SEM.pop();
+			tp1 = find(SEM.top());
+			qua_pop();
 			QT[QT.size() - 1].b = SEM.top();
 			QT[QT.size() - 1].c.x = -1;
-			if (SEM.top().y[0] != '#')
-				tp2 = find(SEM.top().y);
-			SEM.pop();
+			tp2 = find(SEM.top());
+			qua_pop();
+			SEM.push(QT[QT.size() - 1].b);
 		}
-		SEM.push(QT[QT.size() - 1].d);
+		
 	}
 
 	void quap(string name)
@@ -521,6 +547,7 @@ class LL1
 		add_stk.push(add_allocate_num);
 		add_allocate_num = 1;
 		SYNBL[j].type = type;
+		fun_type = type;
 		SYNBL[j].cat = FUN;
 		SYNBL[j].len = 0;
 		PFINFL.push_back(PfinflNode());
@@ -545,12 +572,12 @@ class LL1
 
 	void qua_declare_param(string name) //关于形参1
 	{
-		PfinflNode loc = PFINFL[PFINFL.size() - 1];
+		PfinflNode& loc = PFINFL[PFINFL.size() - 1];
 		SynblNode node;
 		node.cat = TYP;
 		node.name = name;
+		node.type = type;
 		node.len = 1;
-		TAPEL.push_back(TapelNode());
 		for (auto x : SYNBL)
 		{
 			if (x.name == node.name)
@@ -559,7 +586,6 @@ class LL1
 				exit(1);
 			}
 		}
-		node.type = type;
 		node.addr = new_add(node.len);
 		SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL.push_back(node);
 		loc.param.push_back(node);
@@ -587,7 +613,7 @@ class LL1
 		QT[QT.size() - 1].a.y = "judge";
 		QT[QT.size() - 1].b.x = SEM.top().x;
 		QT[QT.size() - 1].b.y = SEM.top().y;
-		SEM.pop();
+		qua_pop();
 		brestack.push({ int(QT.size() - 1), 1 });
 	}
 	void quafsav()
@@ -600,7 +626,7 @@ class LL1
 		QT[QT.size() - 1].c.x = -1;
 		QT[QT.size() - 1].d.x = constack.top();
 		QT[brestack.top().a].c.x = QT.size();
-		SEM.pop();
+		qua_pop();
 	}
 	void quafe()
 	{
@@ -920,9 +946,9 @@ class LL1
 		{
 			call_init(pre);
 		}
-		else if (a == "qua_return")
+		else if (a == "qua_fun_return")
 		{
-			qua_return();
+			qua_fun_return();
 		}
 		else if (a == "qua_return_init")
 		{
@@ -938,7 +964,11 @@ class LL1
 		}
 		else if (a == "qua_call")
 		{
-			call(pre);
+			call(t_name);
+		}
+		else if (a == "qua_pop")
+		{
+			qua_pop();
 		}
 	}
 	void getFirst(int c)
@@ -1133,7 +1163,7 @@ public:
 					stk.push(LL1Tb[num][t][i]);
 					ff = 1;
 				}
-				if (ff == 0)
+				if (ff == 0 && !support_e[num])
 				{
 					cerr << num << ' ' << buff << endl;
 					cerr << "WA!" << endl;

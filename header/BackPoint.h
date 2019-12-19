@@ -144,6 +144,7 @@ public:
 	int MAINLen;
 	stack<int> Floc;
 	vector<string> res;
+	string pre;
 	vector<int> LENL;            //³¤¶È±í
 	BackPoint(LL1 & a)
 	{
@@ -309,6 +310,8 @@ public:
 			}
 			else if (QT[i].a.y == "edfun")
 			{
+				if (pre != "main")
+					add(i, pre + " ENDP");
 				RUNSYMBEL.pop_back();
 				F_loc = Floc.top();
 				Floc.pop();
@@ -325,7 +328,8 @@ public:
 						add(i, "MOV SI, 0");
 					}
 					else
-						add(i, "P" + to_string(QT[i].c.x) + ":");
+						add(i, QT[i].a.y + " PROC");
+					pre = QT[i].a.y;
 					RUNSYMBEL.push_back(FUNSYMBEL[QT[i].c.x]);
 					Floc.push(F_loc);
 					F_loc = QT[i].c.x;
@@ -336,10 +340,7 @@ public:
 		{
 			for (auto x : proc[i])
 			{
-				if (x[x.size() - 1] != ':')
-					res.push_back("\t" + x);
-				else
-					res.push_back(x);
+				res.push_back(x);
 			}
 		}
 		res.push_back("MOV AH, 4CH");

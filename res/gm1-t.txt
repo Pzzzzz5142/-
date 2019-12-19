@@ -20,13 +20,13 @@
 26 getc 3 qua_getc qua_check_def_e quad 
 27 putc 28 qua_putc qua_check_def_e quad | puts 29 qua_puts 
 28 3 | 30 
-31 32 | 33 | null 
-32 34 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
-33 ( qua_call 35 qua_checknum ) 
+31 quap 32 quap | null 
+32 33 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
+34 qua_call_init ( 35 qua_call ) 
 35 36 37 | null 
 37 , 36 37 | null 
-36 3 quap qua_check_def_e 34 qua_contrast | 38 qua_contrastC 
-39 return 
+36 3 33 qua_saveP | 38 qua_contrastC 
+39 20 qua_reth | null 
 2 int qua_save_type | float qua_save_type | bool qua_save_type | char qua_save_type 
 20 40 
 40 41 42 
@@ -39,8 +39,8 @@
 46 48 
 48 49 | ! 49 | - 49 qua. 
 49 3 quap qua_check_def_e 50 | 38 quap | ( 20 ) 
-50 34 | . 3 quap qua_member | null 
-19 2 51 | 3 quap qua_check_def_e 31 | return qua_func_return | 27 | 26 | 6 
+50 33 | . 3 quap qua_member | qua_pop qua_call_init ( 35 qua_call ) | null 
+19 2 51 | 3 31 | return qua_return_init 39 qua_fun_return | 27 | 26 | 6 
 6 struct qua_gen_func_name 3 qua_declare_struct_id 52 
 52 53 | 54 
 53 3 qua_struct_check_def qua_struct_declare 
@@ -53,7 +53,7 @@
 56 55 ; 56 | null 
 3 @I 
 59 3 quap qua_check_def_e | 58 quap 
-34 [ 59 ] qua[] | null 
+33 [ 59 ] qua[] | null 
 38 58 | 60 | 61 | 30 | 29 
 58 @INT 
 60 @FLT 
