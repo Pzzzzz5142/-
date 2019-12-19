@@ -112,6 +112,9 @@ class BackPoint
         }
         else
         {
+            for (int i = 0; i < SYNBL.size(); i++)
+                if (name == SYNBL[i].name)
+                    return SYNBL[i].cat;
             for (int i = RUNSYMBEL.size() - 1; i > -1; i--)
             {
                 for (auto x : RUNSYMBEL[i].SYNBL)
@@ -161,6 +164,7 @@ public:
     int MAINLen;
     int tmp;
     int par_num;
+	int fun_tmp;
     int fun_addr;
     stack<int> Floc;
     vector<string> res;
@@ -211,11 +215,29 @@ public:
             {
                 par_num = 0;
                 fun_addr = stoi(get_add(QT[i].c));
+				fun_tmp = PFINFL[fun_addr].entry;
                 add(i, "LEA DI, PARA");
             }
-            else if (QT[i].a.y == "SAVP")
+            else if (QT[i].a.y == "SVP")
             {
+				movax(i, QT[i].b);
+				add(i, "MOV [DI+" + to_string(par_num++) + "],AX");
             }
+			else if (QT[i].a.y == "call")
+			{
+				add(i, "ADD SI, " + to_string(FUNSYMBEL[fun_tmp].len));
+				for (int i = 0; i < PFINFL[fun_addr].param.size(); i++)
+				{
+					add(i, "MOV AX, [DI+" + to_string(i) + "]");
+					add(i, "MOV [SI+" + to_string(PFINFL[fun_addr].param[i].addr) + "], AX");
+				}
+				add(i, "CALL " + QT[i].b.y);
+				add(i, "SUB SI, " + to_string(FUNSYMBEL[fun_tmp].len));
+			}
+			else if (QT[i].a.y == "ret")
+			{
+				add(i, "RET");
+			}
             else if (QT[i].a.y == "for")
             {
                 tmp = QT[i].c.x;

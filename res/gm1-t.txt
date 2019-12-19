@@ -20,27 +20,27 @@
 26 getc 3 qua_getc qua_check_def_e quad 
 27 putc 28 qua_putc qua_check_def_e quad | puts 29 qua_puts 
 28 3 | 30 
-31 quap 32 | 33 | null 
-32 34 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
-33 qua_call_init ( 35 qua_call ) 
+31 quap 32 | null 
+32 33 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 
+34 qua_call_init ( 35 qua_call ) 
 35 36 37 | null 
 37 , 36 37 | null 
-36 3 34 qua_saveP | 38 qua_contrastC 
-39 20 qua_reth | null 
+36 20 qua_saveP 
+38 20 qua_reth | null 
 2 int qua_save_type | float qua_save_type | bool qua_save_type | char qua_save_type 
-20 40 
-40 41 42 
-42 > qua_save_op 41 qua_op | >= qua_save_op 41 qua_op | < qua_save_op 41 qua_op | <= qua_save_op 41 qua_op | == qua_save_op 41 qua_op | != qua_save_op 41 qua_op | null 
-41 43 
-43 44 45 
-45 + qua_save_op 44 qua_op 45 | - qua_save_op 44 qua_op 45 | null 
-44 46 47 
-47 * qua_save_op 46 qua_op 47 | / qua_save_op 46 qua_op 47 | null 
-46 48 
-48 49 | ! 49 | - 49 qua. 
-49 3 quap qua_check_def_e 50 | 38 quap | ( 20 ) 
-50 34 | . 3 quap qua_member | 33 | null 
-19 2 51 | 3 31 | return qua_return_init 39 qua_fun_return | 27 | 26 | 6 
+20 39 
+39 40 41 
+41 > qua_save_op 40 qua_op | >= qua_save_op 40 qua_op | < qua_save_op 40 qua_op | <= qua_save_op 40 qua_op | == qua_save_op 40 qua_op | != qua_save_op 40 qua_op | null 
+40 42 
+42 43 44 
+44 + qua_save_op 43 qua_op 44 | - qua_save_op 43 qua_op 44 | null 
+43 45 46 
+46 * qua_save_op 45 qua_op 46 | / qua_save_op 45 qua_op 46 | null 
+45 47 
+47 48 | ! 48 | - 48 qua. 
+48 3 quap qua_check_def_e 49 | 50 quap | ( 20 ) 
+49 33 | . 3 quap qua_member | qua_pop 34 | null 
+19 2 51 | 3 31 qua_pop | return qua_return_init 38 qua_fun_return | 27 | 26 | 6 
 6 struct qua_gen_func_name 3 qua_declare_struct_id 52 
 52 53 | 54 
 53 3 qua_struct_check_def qua_struct_declare 
@@ -53,10 +53,10 @@
 56 55 ; 56 | null 
 3 @I 
 59 3 quap qua_check_def_e | 58 quap 
-34 [ 59 ] qua[] | null 
-38 58 | 60 | 61 | 30 | 29 
-58 @INT 
-60 @FLT 
-30 @CH 
-29 @STR 
+33 [ 59 ] qua[] | null 
+50 58 | 60 | 61 | 30 | 29 
+58 #INT 
+60 #FLT 
+30 #CH 
+29 #STR 
 61 true | false 

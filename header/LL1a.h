@@ -55,7 +55,11 @@ struct SemNode
 			out << a.x;
 			return out;
 		}
-
+		if (!a.y.empty() && a.y[0] == '@')
+		{
+			out << a.x;
+			return out;
+		}
 		if (a.x == 0 && a.y != "")
 			out << a.y;
 		else if (a.x == -1)
@@ -189,11 +193,11 @@ class LL1
 		int x = backfun.top();
 		if (FUNSYMBEL.size() <= backfun.top())
 			FUNSYMBEL.resize(backfun.top() + 1);
-		FUNSYMBEL[backfun.top()] = SYMBOLTABEL[SYMBOLTABEL.size() - 1];
 		for (auto x : SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL)
 		{
 			SYMBOLTABEL[SYMBOLTABEL.size() - 1].len += x.len;
 		}
+		FUNSYMBEL[backfun.top()] = SYMBOLTABEL[SYMBOLTABEL.size() - 1];
 		SYMBOLTABEL.pop_back();
 		nowTable--;
 		backfun.pop();
@@ -332,6 +336,8 @@ class LL1
 		string name;
 		if (a.y[0] == '#')
 			name = a.y + to_string(a.x);
+		else if (a.y[0] == '@')
+			return INT;
 		else
 			name = a.y;
 		int flg = 0;
@@ -426,14 +432,14 @@ class LL1
 		QT.push_back(tt);
 	}
 
-	void saveP(string name, string fun__name)
+	void saveP(string fun__name)
 	{
 		PfinflNode fun = get_func(fun__name);
 		QtNode tmp;
 		tmp.a.x = 0;
 		tmp.a.y = "SVP";
-		tmp.b.x = 0;
-		tmp.b.y = name;
+		tmp.b = SEM.top();
+		SEM.pop();
 		tmp.c.x = -1;
 		tmp.d.x = -1;
 		if (par_cnt >= fun.param.size())
@@ -441,7 +447,7 @@ class LL1
 			cerr << "Param num more than enough" << endl;
 			exit(1);
 		}
-		check_tp(find({ 0,name }), fun.param[par_cnt].type);
+		check_tp(find(tmp.b), fun.param[par_cnt].type);
 		par_cnt++;
 		QT.push_back(tmp);
 	}
@@ -528,9 +534,13 @@ class LL1
 
 	void quap(string name)
 	{
-		int x = 0;
-		string y = name;
-		SemNode z = { x, y };
+		SemNode z;
+		if (name[0] >= '0' && name[0] <= '9')
+		{
+			z = { stoi(name),"@" };
+		}
+		else
+			z = { 0,name };
 		SEM.push(z);
 	}
 
@@ -542,7 +552,7 @@ class LL1
 		QT[QT.size() - 1].c.x = func_num;
 		QT[QT.size() - 1].b.x = -1;
 		QT[QT.size() - 1].d.x = -1;
-		backfun.push(func_num++);
+		backfun.push(func_num);
 		SYNBL.push_back(SynblNode());
 		int j = SYNBL.size() - 1;
 		SYNBL[j].name = name;
@@ -558,7 +568,7 @@ class LL1
 		SYMBOLTABEL.push_back(SymbolTableNode(0));
 		nowTable++;
 		int k = PFINFL.size() - 1;
-		PFINFL[k].entry = QT.size() - 1;
+		PFINFL[k].entry = func_num++;
 		SYNBL[j].addr = k;
 	}
 
@@ -971,7 +981,7 @@ class LL1
 		}
 		else if (a == "qua_saveP")
 		{
-			saveP(pre, t_name);
+			saveP(t_name);
 		}
 		else if (a == "qua_reth")
 		{
@@ -1093,6 +1103,7 @@ public:
 	vector<PfinflNode> PFINFL;   //函数表
 	vector<SynblNode> PARAMETER; //参数表
 	vector<int> LENL;            //长度表
+	string now_buff;
 	LL1()
 	{
 		memset(support_e, 0, sizeof(support_e));
@@ -1117,6 +1128,7 @@ public:
 		stack<string> stk;
 		stack<string> sem;
 		queue<string> buff_que;
+		int flg = 0;
 		while (ss >> buff)
 		{
 			buff_que.push(buff);
@@ -1140,14 +1152,17 @@ public:
 					{
 						cerr << "WA!" << endl;
 						cerr << "Expect " << '\'' << pp << "\' but get " << buff;
+						cerr << now_buff;
 						exit(1);
 					}
 					else
 					{
 						pre = buff;
-						if (pre[0] == '@')
+						if (pre[0] == '@' || pre[0] == '#')
 							pre = get_id();
-
+						now_buff += pre+' ';
+						if (pre == ";" || pre == "{" || pre == "}")
+							now_buff = "";
 						buff_que.pop();
 						if (buff_que.empty())
 						{
