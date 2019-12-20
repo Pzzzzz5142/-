@@ -127,6 +127,13 @@ class LL1
 	int par_cnt;
 	int flo;
 
+	void ErrorHandling(string messaage)
+	{
+		cerr << messaage << endl;
+		cerr << "At sentence: " << now_buff << endl;
+		exit(1);
+	}
+
 	struct bre
 	{
 		int a;
@@ -168,7 +175,7 @@ class LL1
 			{
 				if (x.name == node.name)
 				{
-					cerr << "SAME NAME FOUND!" << endl;
+					ErrorHandling("SAME NAME \'" + x.name + "\' FOUND!\n");
 					exit(1);
 				}
 			}
@@ -180,7 +187,7 @@ class LL1
 			{
 				if (x.name == node.name)
 				{
-					cerr << "SAME NAME FOUND!" << endl;
+					ErrorHandling("SAME NAME \'" + x.name + "\' FOUND!\n");
 					exit(1);
 				}
 			}
@@ -193,9 +200,10 @@ class LL1
 		int x = backfun.top();
 		if (FUNSYMBEL.size() <= backfun.top())
 			FUNSYMBEL.resize(backfun.top() + 1);
+		SYMBOLTABEL[SYMBOLTABEL.size() - 1].len = 0;
 		for (auto x : SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL)
 		{
-			SYMBOLTABEL[SYMBOLTABEL.size() - 1].len += x.len;
+			SYMBOLTABEL[SYMBOLTABEL.size() - 1].len += max(SYMBOLTABEL[SYMBOLTABEL.size() - 1].len, x.addr + x.len - 1);
 		}
 		FUNSYMBEL[backfun.top()] = SYMBOLTABEL[SYMBOLTABEL.size() - 1];
 		SYMBOLTABEL.pop_back();
@@ -235,7 +243,6 @@ class LL1
 		QT[QT.size() - 1].d.x = -1;
 		qua_pop();
 		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
 		backaddress.push(QT.size() - 1);
 	}
 
@@ -265,7 +272,6 @@ class LL1
 		SYMBOLTABEL.push_back(SymbolTableNode(1));
 		nowTable++;
 		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
 	}
 
 	void endelse()
@@ -312,7 +318,6 @@ class LL1
 		QT[QT.size() - 1].c.x = -1;
 		qua_pop();
 		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
 		SYMBOLTABEL.push_back(SymbolTableNode(1));
 		nowTable++;
 		brestack.push({ int(QT.size() - 1), 1 });
@@ -363,7 +368,7 @@ class LL1
 			}
 		if (flg == 0)
 		{
-			cerr << "Not found " << SEM.top().y << endl;
+			ErrorHandling("Not found " + SEM.top().y);
 			exit(1);
 		}
 	}
@@ -377,7 +382,7 @@ class LL1
 				return PFINFL[x.addr];
 			}
 		}
-		cerr << "Not found " << name << endl;
+		ErrorHandling("not found " + name);
 		exit(1);
 	}
 
@@ -412,7 +417,7 @@ class LL1
 		PfinflNode tmp = get_func(name);
 		if (par_cnt != tmp.param.size())
 		{
-			cerr << "The para num for function: " << name << " is not enough!" << endl;
+			ErrorHandling("The para num for function: " + name + " is not enough!");
 			exit(1);
 		}
 		QtNode tt;
@@ -444,7 +449,8 @@ class LL1
 		tmp.d.x = -1;
 		if (par_cnt >= fun.param.size())
 		{
-			cerr << "Param num more than enough" << endl;
+			//cerr << "Param num more than enough" << endl;
+			ErrorHandling("Param num more than enough");
 			exit(1);
 		}
 		check_tp(find(tmp.b), fun.param[par_cnt].type);
@@ -488,7 +494,8 @@ class LL1
 	{
 		if (a > 0 || b > 0 || a == VOID || b == VOID)
 		{
-			cerr << "Wrong type!" << endl;
+			//cerr << "Wrong type!" << endl;
+			ErrorHandling("Wrong type");
 			exit(1);
 		}
 		return true;
@@ -592,14 +599,6 @@ class LL1
 		node.name = name;
 		node.type = type;
 		node.len = 1;
-		for (auto x : SYNBL)
-		{
-			if (x.name == node.name)
-			{
-				cerr << "SAME NAME FOUND!" << endl;
-				exit(1);
-			}
-		}
 		node.addr = new_add(node.len);
 		SYMBOLTABEL[SYMBOLTABEL.size() - 1].SYNBL.push_back(node);
 		loc.param.push_back(node);
@@ -647,7 +646,6 @@ class LL1
 		constack.push(flo);
 
 		QT[brestack.top().a].c.x = QT.size();
-		qua_pop();
 	}
 	void quafe()
 	{
@@ -664,7 +662,7 @@ class LL1
 			brestack.pop();
 			if (loc.tab == 1)
 				flg = 1;
-			QT[loc.a].d.x = QT.size() - 1;
+			QT[loc.a].d.x = QT.size();
 		}
 		qua_return();
 	}
@@ -794,7 +792,8 @@ class LL1
 	{
 		if (stk_id.empty())
 		{
-			cerr << "id is not enough!" << endl;
+			//cerr << "id is not enough!" << endl;
+			ErrorHandling("id is not enough!");
 			exit(1);
 		}
 		string pp = stk_id.front();
@@ -1151,7 +1150,7 @@ public:
 					else if (pp != buff)
 					{
 						cerr << "WA!" << endl;
-						cerr << "Expect " << '\'' << pp << "\' but get " << buff;
+						cerr << "Expect " << '\'' << pp << "\' but get " << buff << endl;;
 						cerr << now_buff;
 						exit(1);
 					}

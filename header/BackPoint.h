@@ -12,7 +12,12 @@ class BackPoint
     void add(int loc, string message)
     {
         if (loc < proc.size())
-            proc[loc].push_back(message);
+        {
+            if (message[message.size() - 1] == ':' && message[0] != 'O')
+                proc[loc].insert(proc[loc].begin(), message);
+            else
+                proc[loc].push_back(message);
+        }
         else
         {
             cerr << loc << endl;
@@ -71,7 +76,7 @@ class BackPoint
             {
                 if (name == x.name)
                 {
-                    return to_string(abs(x.addr));
+                    return to_string(abs(x.addr) * 2);
                 }
             }
             if (RUNSYMBEL[i].link)
@@ -80,7 +85,7 @@ class BackPoint
         for (auto x : SYNBL)
         {
             if (name == x.name)
-                return to_string(abs(x.addr));
+                return to_string(abs(x.addr * 2));
         }
         return "-1";
     }
@@ -221,18 +226,19 @@ public:
             else if (QT[i].a.y == "SVP")
             {
 				movax(i, QT[i].b);
-				add(i, "MOV [DI+" + to_string(par_num++) + "],AX");
+                add(i, "MOV [DI+" + to_string(par_num * 2) + "],AX");
+                par_num++;
             }
 			else if (QT[i].a.y == "call")
 			{
-				add(i, "ADD SI, " + to_string(FUNSYMBEL[fun_tmp].len));
+                add(i, "ADD SI, " + to_string(FUNSYMBEL[F_loc].len));
 				for (int i = 0; i < PFINFL[fun_addr].param.size(); i++)
 				{
-					add(i, "MOV AX, [DI+" + to_string(i) + "]");
-					add(i, "MOV [SI+" + to_string(PFINFL[fun_addr].param[i].addr) + "], AX");
+                    add(i, "MOV AX, [DI+" + to_string(i * 2) + "]");
+                    add(i, "MOV [SI+" + to_string(PFINFL[fun_addr].param[i].addr * 2) + "], AX");
 				}
 				add(i, "CALL " + QT[i].b.y);
-				add(i, "SUB SI, " + to_string(FUNSYMBEL[fun_tmp].len));
+                add(i, "SUB SI, " + to_string(FUNSYMBEL[F_loc].len));
 			}
 			else if (QT[i].a.y == "ret")
 			{
@@ -341,17 +347,20 @@ public:
             else if (QT[i].a.y == "*")
             {
                 //add(i, "MOV AX, [" + get_add(QT[i].b) + "+SI]");
+                add(i, "XOR DX, DX");
                 movax(i, QT[i].b);
-                //add(i, "ADD AX, [" + get_add(QT[i].c) + "+SI]");
-                movax(i, QT[i].c, "AX", "MUL");
+                movax(i, QT[i].c, "BX");
+                add(i, "MUL BX");
                 //add(i, "MOV [" + get_add(QT[i].d) + "+SI], AX");
                 movd(i, QT[i].d);
             }
             else if (QT[i].a.y == "/")
             {
                 //add(i, "MOV AX, [" + get_add(QT[i].b) + "+SI]");
+                add(i, "XOR DX, DX");
                 movax(i, QT[i].b);
-                //add(i, "ADD AX, [" + get_add(QT[i].c) + "+SI]");
+                movax(i, QT[i].c, "BX");
+                add(i, "DIV BX");
                 movax(i, QT[i].c, "AX", "DIV");
                 //add(i, "MOV [" + get_add(QT[i].d) + "+SI], AX");
                 movd(i, QT[i].d);
@@ -490,6 +499,7 @@ public:
         }
         res.push_back("MOV AH, 4CH");
         res.push_back("INT 21H");
+        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nret\ndsp endp");
         res.push_back("CODE ENDS");
         res.push_back("END START");
     }

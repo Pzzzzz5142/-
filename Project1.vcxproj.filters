@@ -49,6 +49,9 @@
     <ClCompile Include="source\Turing.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="source\Optimize.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\LL1a.h">
@@ -58,6 +61,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="header\BackPoint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Optimize.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
