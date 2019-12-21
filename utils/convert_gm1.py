@@ -2,6 +2,8 @@ VN = []
 with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
     flw = open('./Compiler/res/gm1-t.txt', 'w', encoding='utf-8')
     flwf = open('./Compiler/res/gm1-tf.txt', 'w', encoding='utf-8')
+    flw1 = open(r'C:\Users\Pzzzzz\source\repos\Project1\res\gm1-t.txt', 'w', encoding='utf-8')
+    flwf1 = open(r'C:\Users\Pzzzzz\source\repos\Project1\res\gm1-tf.txt', 'w', encoding='utf-8')    
     for line in fl.readlines():
         if line == '\n':
             continue
@@ -29,3 +31,5 @@ with open('./Compiler/res/gm1.txt', encoding='utf-8') as fl:
         tmp1+=['\n']
         flw.writelines(tmp)
         flwf.writelines(tmp1)
+        flw1.writelines(tmp)
+        flwf1.writelines(tmp1)
