@@ -60,6 +60,11 @@ struct SemNode
 			out << a.x;
 			return out;
 		}
+		if (!a.y.empty() && a.y[0] == '&')
+		{
+			out << a.y;
+			return out;
+		}
 		if (a.x == 0 && a.y != "")
 			out << a.y;
 		else if (a.x == -1)
@@ -244,6 +249,18 @@ class LL1
 		qua_pop();
 		add_stk.push(add_allocate_num);
 		backaddress.push(QT.size() - 1);
+	}
+
+	void putc()
+	{
+		SemNode tmp = SEM.top();
+		SEM.pop();
+		QtNode tt;
+		tt.a = { 0,"puts" };
+		tt.b = tmp;
+		tt.c.x = -1;
+		tt.d.x = -1;
+		QT.push_back(tt);
 	}
 
 	void if2()
@@ -433,7 +450,7 @@ class LL1
 		tt.b = { num,"#t" };
 		SEM.push({ num++,"#t" });
 		tt.c.x = -1;
-		tt.d = { 0,"#DX" };
+		tt.d = { 0,"&DX" };
 		QT.push_back(tt);
 	}
 
@@ -473,7 +490,7 @@ class LL1
 		{
 			QtNode tmp2;
 			tmp2.a = { 0,"=" };
-			tmp2.b = { 0,"#DX" };
+			tmp2.b = { 0,"&DX" };
 			//RETT_stk.push_back(fun_type);
 			tmp2.c.x = -1;
 			tmp2.d = SEM.top();
@@ -993,6 +1010,10 @@ class LL1
 		else if (a == "qua_pop")
 		{
 			qua_pop();
+		}
+		else if (a == "qua_putc")
+		{
+			putc();
 		}
 	}
 	void getFirst(int c)
