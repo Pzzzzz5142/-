@@ -32,6 +32,7 @@
     <ClCompile Include="source\BackPoint.cpp" />
     <ClCompile Include="source\LL1a.cpp" />
     <ClCompile Include="source\Optimize.cpp" />
+    <ClCompile Include="source\Tokenlize.cpp" />
     <ClCompile Include="source\Turing.cpp" />
     <ClCompile Include="source\源.cpp" />
   </ItemGroup>
@@ -39,6 +40,7 @@
     <ClInclude Include="header\BackPoint.h" />
     <ClInclude Include="header\LL1a.h" />
     <ClInclude Include="header\Optimize.h" />
+    <ClInclude Include="header\Tokenlize.h" />
     <ClInclude Include="header\Turing.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

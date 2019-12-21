@@ -583,7 +583,6 @@ class LL1
 		if (name == "main")
 			qua_run();
 		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
 		SYNBL[j].type = type;
 		fun_type = type;
 		SYNBL[j].cat = FUN;

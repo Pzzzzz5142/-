@@ -76,7 +76,7 @@ class BackPoint
             {
                 if (name == x.name)
                 {
-                    return to_string(abs(x.addr) * 2);
+                    return "SI+" + to_string(abs(x.addr) * 2);
                 }
             }
             if (RUNSYMBEL[i].link)
@@ -88,23 +88,6 @@ class BackPoint
                 return to_string(abs(x.addr * 2));
         }
         return "-1";
-    }
-
-    void run_fun(int bg, int ed)
-    {
-        for (int loc = bg; loc < ed; loc++)
-        {
-            auto x = QT[loc];
-            if (x.a.y == "+")
-            {
-                add(loc, "ADD");
-            }
-            else if (x.a.y == "=")
-            {
-                add(loc, "MOV AX, [" + get_add(x.d) + "]");
-                add(loc, "MOV [" + get_add(x.b) + ", AX");
-            }
-        }
     }
 
     int get_type(string name)
@@ -142,7 +125,7 @@ class BackPoint
         else if (a.y == "&DX")
             add(loc, op + " " + to + ", DX");
         else
-            add(loc, op + " " + to + ", [SI+" + get_add(a) + "]");
+            add(loc, op + " " + to + ", [" + get_add(a) + "]");
     }
 
     void movd(int loc, SemNode a, string to = "AX")
@@ -152,7 +135,34 @@ class BackPoint
         else if (a.y == "&DX")
             add(loc, "MOV DX, " + to);
         else
-            add(loc, "MOV [" + get_add(a) + "+SI], " + to);
+            add(loc, "MOV [" + get_add(a) + "], " + to);
+    }
+
+    void better()
+    {
+        if (res.empty())
+            return;
+        string pre;
+        for (vector<string>::iterator i = res.begin() + 1; i != res.end();)
+        {
+            pre = *(i - 1);
+            stringstream ss(pre);
+            string t1, t2;
+            ss >> t1;
+            ss >> t1;
+            stringstream tt(*i);
+            tt >> t2;
+            tt >> t2;
+            tt >> t2;
+            if (t1[t1.size() - 1] == ',')
+                t1.pop_back();
+            if (t1 == t2&&t1[0]=='[')
+            {
+                i=res.erase(i);
+            }
+            else
+                ++i;
+        }
     }
 
 public:
@@ -504,9 +514,10 @@ public:
         }
         res.push_back("MOV AH, 4CH");
         res.push_back("INT 21H");
-        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nmov dx, 13\nmov ah, 02h\nint 21h\nret\ndsp endp");
+        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nmov dx, 10\nmov ah, 02h\nint 21h\nret\ndsp endp");
         res.push_back("CODE ENDS");
         res.push_back("END START");
+        better();
     }
     void show()
     {
