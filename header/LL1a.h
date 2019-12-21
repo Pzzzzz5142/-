@@ -83,7 +83,7 @@ struct QtNode
 	SemNode d;
 	friend ostream& operator<<(ostream& out, QtNode a)
 	{
-		out << a.a << ", " << a.b << ", " << a.c << ", " << a.d << endl;
+		out << a.a << ", " << a.b << ", " << a.c << ", " << a.d;
 		return out;
 	}
 }; //四元式结构体
@@ -349,6 +349,7 @@ class LL1
 		QT[QT.size() - 1].c.x = -1;
 		QT[QT.size() - 1].d.x = constack.top();
 		QT[brestack.top().a].d.x = QT.size();
+		brestack.pop();
 		constack.pop();
 		qua_return();
 	}
@@ -583,6 +584,7 @@ class LL1
 		if (name == "main")
 			qua_run();
 		add_stk.push(add_allocate_num);
+		add_allocate_num = 1;
 		SYNBL[j].type = type;
 		fun_type = type;
 		SYNBL[j].cat = FUN;
@@ -655,7 +657,6 @@ class LL1
 		QT[QT.size() - 1].c.x = -1;
 		QT[QT.size() - 1].d.x = constack.top();
 		add_stk.push(add_allocate_num);
-		add_allocate_num = 1;
 		SYMBOLTABEL.push_back(SymbolTableNode(1));
 		nowTable++;
 		constack.pop();
@@ -1227,5 +1228,54 @@ public:
 		int t = 0;
 		for (auto x : QT)
 			cout << "(" << t++ << ") " << x;
+	}
+
+	void printingtable1()//打印符号表
+	{
+		cout << "全局符号表是" << endl;
+		cout << "name  |" << "type  |" << "cat  |" << "addr   |" << endl;
+		for (int i = 0; i < SYNBL.size(); i++)
+		{
+				cout << setw(7) << SYNBL[i].name;
+				cout << setw(7) << SYNBL[i].type;
+				cout << setw(7) << SYNBL[i].cat;
+				cout << setw(7) << SYNBL[i].addr;
+				cout << endl;
+		
+		}
+	}
+	void printingtable2()//打印符号表
+	{
+		for (int i = 0; i < FUNSYMBEL.size(); i++)
+		{
+			cout << "类型表";
+			cout << i;
+			cout << "是" << endl;
+			cout << "name  |" << "type  |" << "cat   |" << "addr  |" << endl;
+			for (int j = 0; j < FUNSYMBEL[i].SYNBL.size(); j++)
+			{
+				cout << setw(7) << FUNSYMBEL[i].SYNBL[j].name;
+				cout << setw(7) << FUNSYMBEL[i].SYNBL[j].type;
+				cout << setw(7) << FUNSYMBEL[i].SYNBL[j].cat;
+				cout << setw(7) << FUNSYMBEL[i].SYNBL[j].addr;
+				cout << endl;
+			}
+		}
+	}
+
+	void printingLL1()//打印LL1预测分析表
+	{
+		for (int i = 0; i < LL1Tb.size(); i++)
+		{
+			for (int j = 0; j < LL1Tb[i].size(); j++)
+			{
+				for (int k = 0; k < LL1Tb[i][j].size(); k++)
+				{
+					cout << LL1Tb[i][j][k];
+				}
+				cout << " ";
+			}
+			cout << endl;
+		}
 	}
 };

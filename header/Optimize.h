@@ -538,8 +538,16 @@ public:
 	void show()
 	{
 		int i = 0;
-		for (auto x : QT2)
-			cout << '(' << i++ << ") " << x;
+        for (int i = 0; i < QT.size(); i++)
+        {
+            cout << "(" << i << ") " << QT[i];
+            cout << "\t";
+            if (i < QT2.size())
+            {
+                cout << "(" << i << ") " << QT2[i];
+            }
+            cout << endl;
+        }
 	}
     Optimizer(const LL1& a)
     {

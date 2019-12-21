@@ -85,7 +85,10 @@ class BackPoint
         for (auto x : SYNBL)
         {
             if (name == x.name)
-                return to_string(abs(x.addr * 2));
+                if (x.cat != FUN)
+                    return "BX+" + to_string(abs(x.addr * 2));
+                else
+                    return to_string(abs(x.addr));
         }
         return "-1";
     }
@@ -156,7 +159,7 @@ class BackPoint
             tt >> t2;
             if (t1[t1.size() - 1] == ',')
                 t1.pop_back();
-            if (t1 == t2&&t1[0]=='[')
+            if ((t1 == t2 && t1[0] == '[') ||  *i== pre)
             {
                 i=res.erase(i);
             }
@@ -201,15 +204,7 @@ public:
         PARAMETER = a.PARAMETER; //参数表
         FUNSYMBEL = a.FUNSYMBEL;
         LENL = a.LENL; //长度表
-        int bg = 0, ed, qtbg;
-        for (int i = 0; i < QT.size(); i++)
-        {
-            if (QT[i].a.y == "main")
-            {
-                qtbg = i;
-                break;
-            }
-        }
+
         MAINLen = 0;
         int ll = 0;
         for (auto x : SYNBL)
@@ -247,10 +242,11 @@ public:
 			else if (QT[i].a.y == "call")
 			{
                 add(i, "ADD SI, " + to_string(FUNSYMBEL[F_loc].len));
+                int k = i;
 				for (int i = 0; i < PFINFL[fun_addr].param.size(); i++)
 				{
-                    add(i, "MOV AX, [DI+" + to_string(i * 2) + "]");
-                    add(i, "MOV [SI+" + to_string(PFINFL[fun_addr].param[i].addr * 2) + "], AX");
+                    add(k, "MOV AX, [DI+" + to_string(i * 2) + "]");
+                    add(k, "MOV [SI+" + to_string(PFINFL[fun_addr].param[i].addr * 2) + "], AX");
 				}
 				add(i, "CALL " + QT[i].b.y);
                 add(i, "SUB SI, " + to_string(FUNSYMBEL[F_loc].len));
@@ -364,8 +360,8 @@ public:
                 //add(i, "MOV AX, [" + get_add(QT[i].b) + "+SI]");
                 add(i, "XOR DX, DX");
                 movax(i, QT[i].b);
-                movax(i, QT[i].c, "BX");
-                add(i, "MUL BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "MUL CX");
                 //add(i, "MOV [" + get_add(QT[i].d) + "+SI], AX");
                 movd(i, QT[i].d);
             }
@@ -374,8 +370,8 @@ public:
                 //add(i, "MOV AX, [" + get_add(QT[i].b) + "+SI]");
                 add(i, "XOR DX, DX");
                 movax(i, QT[i].b);
-                movax(i, QT[i].c, "BX");
-                add(i, "DIV BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "DIV CX");
                 movax(i, QT[i].c, "AX", "DIV");
                 //add(i, "MOV [" + get_add(QT[i].d) + "+SI], AX");
                 movd(i, QT[i].d);
@@ -392,8 +388,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JZ O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -407,8 +403,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JNZ O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -422,8 +418,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JB O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -437,8 +433,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JA O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -452,8 +448,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JAE O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -467,8 +463,8 @@ public:
                 //add(i, "MOV AX, [SI+" + get_add(QT[i].b) + "]");
                 movax(i, QT[i].b);
                 //add(i, "MOV BX, [SI+" + get_add(QT[i].c) + "]");
-                movax(i, QT[i].c, "BX");
-                add(i, "CMP AX, BX");
+                movax(i, QT[i].c, "CX");
+                add(i, "CMP AX, CX");
                 add(i, "MOV AX,1");
                 add(i, "JBE O" + to_string(ll));
                 add(i, "MOV AX,0");
@@ -494,7 +490,8 @@ public:
                         add(i, "START:");
                         add(i, "MOV AX, DATA");
                         add(i, "MOV DS, AX");
-                        add(i, "MOV SI, 0");
+                        add(i, "MOV SI, " + to_string(MAINLen * 2));
+                        add(i, "XOR BX, BX");
                     }
                     else
                         add(i, QT[i].a.y + " PROC");
@@ -514,7 +511,7 @@ public:
         }
         res.push_back("MOV AH, 4CH");
         res.push_back("INT 21H");
-        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nmov dx, 10\nmov ah, 02h\nint 21h\nret\ndsp endp");
+        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nmov dx, 10\nmov bx,0\nmov ah, 02h\nint 21h\nret\ndsp endp");
         res.push_back("CODE ENDS");
         res.push_back("END START");
         better();
@@ -523,6 +520,15 @@ public:
     {
         for (auto x : res)
             cout << x << endl;
+    }
+
+    void output(string path = "./res/")
+    {
+        ofstream flo(path + "/tmp.asm");
+        for (auto x : res)
+        {
+            flo << x << endl;
+        }
     }
     ~BackPoint();
 };

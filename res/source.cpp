@@ -8,32 +8,29 @@ int F(int i)
     }
     return F(i-1)*i;
 }
+int LL(int x,int y)
+{
+    return x+y;
+}
 int main()
 {
     int a;
     int b;
     int c;
     int d;
-    a=10;
-    b=20;
-    for(i=1;i<6;i=i+1)
+    a=1;
+    d=0;
+    for(i=0;i<10;i=i+1)
     {
-        a=a*2;
-        if(b<10)
+        a=a+b;
+        c=0;
+        while(c<10)
         {
-            while(c<10)
-            {
-                d=c+1;
-            }
-        }
-        else 
-        {
-            putc(F(i));
+            d=d+1;
+            c=c+1;
         }
     }
-    putc(a);
-    putc(b);
-    putc(c);
+    LL(i);
     putc(d);
 }
 #
