@@ -139,7 +139,7 @@ class BackPoint
     {
         if (!a.y.empty() && a.y[0] == '@')
             add(loc, op + " " + to + ", " + to_string(a.x));
-        else if (a.y == "#DX")
+        else if (a.y == "&DX")
             add(loc, op + " " + to + ", DX");
         else
             add(loc, op + " " + to + ", [SI+" + get_add(a) + "]");
@@ -149,7 +149,7 @@ class BackPoint
     {
         if (!a.y.empty() && a.y[0] == '@')
             add(loc, "MOV " + to_string(a.x) + ", " + to);
-        else if (a.y == "#DX")
+        else if (a.y == "&DX")
             add(loc, "MOV DX, " + to);
         else
             add(loc, "MOV [" + get_add(a) + "+SI], " + to);
@@ -177,7 +177,7 @@ public:
     vector<int> LENL; //³¤¶È±í
     BackPoint(LL1& a)
     {
-        res.push_back("data segment\n	dw 80 dup(0)\n	PARA dw 80 dup(? )\n data ends\n stk segment stack\n		dw 50 dup(0)\n stk ends\n code segment\n	assume cs : code\n");
+        res.push_back("data segment\n\tdw 100 dup(0)\n\tPARA dw 100 dup(? )\ndata ends\nstk segment stack\n\tdw 50 dup(0)\nstk ends\ncode segment\n\tassume cs : code\n");
         top = 0;
         F_loc = -1;
         bottom = 0;
@@ -216,6 +216,11 @@ public:
             {
                 tmp = QT[i].c.x;
             }
+			else if (QT[i].a.y == "puts")
+			{
+				movax(i, QT[i].b);
+				add(i, "CALL dsp");
+			}
             else if (QT[i].a.y == "INIP")
             {
                 par_num = 0;
@@ -499,7 +504,7 @@ public:
         }
         res.push_back("MOV AH, 4CH");
         res.push_back("INT 21H");
-        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nret\ndsp endp");
+        res.push_back("dsp proc\n\txor cx, cx\nAAA000:\n\txor dx, dx\nmov bx, 10\ndiv bx\npush dx\ninc cx\ncmp ax, 0\njnz AAA000\nlpp :\npop dx\nadd dx, '0'\nmov ah, 02h\nint 21h\nloop lpp\nmov dx, 13\nmov ah, 02h\nint 21h\nret\ndsp endp");
         res.push_back("CODE ENDS");
         res.push_back("END START");
     }

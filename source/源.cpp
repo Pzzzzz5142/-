@@ -10,6 +10,7 @@ int main()
 	a.show();
 	Optimizer c(a);
 	c.solve();
+	c.show();
 	BackPoint b(a);
 	b.show();
 	return 0;
