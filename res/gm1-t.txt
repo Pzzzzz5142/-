@@ -18,7 +18,7 @@
 25 19 | null 
 15 continue qua_continue qua_check_jump ; | break qua_break qua_check_jump ; 
 26 getc 3 qua_getc qua_check_def_e quad 
-27 put ( 20 ) qua_putc 
+27 putc ( 20 ) qua_putc 
 28 3 | 29 
 30 quap 31 | null 
 31 32 = qua_save_op 20 qua_op | . 3 quap qua_member = qua_save_op 20 qua_op | = qua_save_op 20 qua_op 

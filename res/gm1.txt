@@ -44,7 +44,7 @@ $循环跳转 -> continue qua_continue qua_check_jump ; | break qua_break qua_ch
 
 $输入语句 -> getc $标识符 qua_getc qua_check_def_e quad
 
-$输出语句 -> put ( $表达式 ) qua_putc
+$输出语句 -> putc ( $表达式 ) qua_putc
 
 $输出字符 -> $标识符 | $字符型常量
 
